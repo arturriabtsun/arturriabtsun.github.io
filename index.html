@@ -163,7 +163,7 @@ en:{
   <p class="muted">Scores are raw scores with <b>rough Low, Average and High bands</b> based on test difficulty. They are not percentiles compared with people your age; only real norms can give that. Your screen, speakers and mouse can also affect some results. Use the profile for self-exploration. For a validated result, take the test with JOCRF.</p>`,
   completed:n=>`<b>${n} / 21</b> aptitudes completed`,viewReport:'View profile report',
   s1:'Session 1: reasoning, ideas, numbers, words (~60 min)',s2:'Session 2: spatial, auditory, visual, motor (~45 min)',audioNote:'Auditory tests need headphones or speakers.',
-  export:'Export results',import:'Import results',reset:'Reset all',confirmReset:'Delete all saved results?',importErr:'Could not read that file.',
+  export:'Export results',aiCopy:'Copy for AI chat',aiCopied:'Copied! Paste it into ChatGPT, Claude or any AI chat.',aiFail:'Could not copy. Use Export results instead.',aiHint:'Export or copy your results in a format any AI chat understands on its own, then ask it for career advice.',import:'Import results',reset:'Reset all',confirmReset:'Delete all saved results?',importErr:'Could not read that file.',
   doneTitle:n=>`${n} — done`,backToBattery:'Back to battery',profileReport:'Profile report',langTag:l=>` <span class="muted">(${l==='uk'?'Ukrainian version':'English version'})</span>`,
   distractor:'Short break task — answer these sums until the timer ends (not scored)',
   sameS:'Same (S)',mirrorD:'Mirror (D)',pfQ:'Which shows the sheet unfolded?',indRow:i=>`Row ${i} of 20 — choose the three that belong together`,chart:i=>`Chart ${i} of 12`,
@@ -259,7 +259,7 @@ uk:{
   <p class="muted">Результати показано як сирі бали з <b>приблизними рівнями Низький / Середній / Високий</b>, що залежать від складності тестів. Це не процентилі порівняно з однолітками: їх можуть дати лише справжні норми. На деякі результати також впливають екран, динаміки й миша. Сприймайте профіль як інструмент самопізнання, а для валідного результату пройдіть тестування в самому JOCRF.</p>`,
   completed:n=>`Пройдено здібностей: <b>${n} / 21</b>`,viewReport:'Переглянути звіт-профіль',
   s1:'Сесія 1: мислення, ідеї, числа, слова (~60 хв)',s2:'Сесія 2: простір, слух, зір, моторика (~45 хв)',audioNote:'Для слухових тестів потрібні навушники або колонки.',
-  export:'Експортувати результати',import:'Імпортувати результати',reset:'Скинути все',confirmReset:'Видалити всі збережені результати?',importErr:'Не вдалося прочитати цей файл.',
+  export:'Експортувати результати',aiCopy:'Копіювати для AI-чату',aiCopied:'Скопійовано! Вставте в ChatGPT, Claude чи інший AI-чат.',aiFail:'Не вдалося скопіювати. Скористайтеся експортом.',aiHint:'Експортуйте або скопіюйте результати у форматі, який будь-який AI-чат зрозуміє без пояснень, і попросіть порад щодо кар’єри.',import:'Імпортувати результати',reset:'Скинути все',confirmReset:'Видалити всі збережені результати?',importErr:'Не вдалося прочитати цей файл.',
   doneTitle:n=>`${n} — завершено`,backToBattery:'До переліку тестів',profileReport:'Звіт-профіль',langTag:l=>` <span class="muted">(${l==='uk'?'українська версія':'англійська версія'})</span>`,
   distractor:'Коротка перерва — розв’язуйте ці приклади, доки не скінчиться час (не оцінюється)',
   sameS:'Та сама (S)',mirrorD:'Дзеркальна (D)',pfQ:'Який вигляд має розгорнутий аркуш?',indRow:i=>`Ряд ${i} з 20 — оберіть три зображення зі спільною ознакою`,chart:i=>`Схема ${i} з 12`,
@@ -731,29 +731,74 @@ function home(){cleanup();applyLang();const nApt=TESTS.filter(x=>x.apt&&RESULTS[
  <div class="row">${t('completed',nApt)}<button class="primary" onclick="report()">${t('viewReport')}</button></div></div>
  <div class="card"><h3>${t('s1')}</h3><div class="test-list">${sess(1)}</div></div>
  <div class="card"><h3>${t('s2')}</h3><div class="muted" style="margin-bottom:8px">${t('audioNote')}</div><div class="test-list">${sess(2)}</div></div>
- <div class="card noprint row"><button onclick="exportJSON()">${t('export')}</button><button onclick="$('#imp').click()">${t('import')}</button><input id="imp" type="file" accept=".json" style="display:none" onchange="importJSON(this)"><button onclick="if(confirm(t('confirmReset'))){RESULTS={};store.set({});home();}">${t('reset')}</button></div>`;}
+ <div class="card noprint"><p class="muted" style="margin:0 0 12px">${t('aiHint')}</p><div class="row"><button class="primary" onclick="copyForAI(this)">${t('aiCopy')}</button><button onclick="exportJSON()">${t('export')}</button><button onclick="$('#imp').click()">${t('import')}</button><input id="imp" type="file" accept=".json" style="display:none" onchange="importJSON(this)"><button onclick="if(confirm(t('confirmReset'))){RESULTS={};store.set({});home();}">${t('reset')}</button><span class="muted aiMsg"></span></div></div>`;}
 function openTest(id){cleanup();const x=byId(id);const[nm,meas,instr]=L().tests[id];
  stage.innerHTML=`<div class="card"><div class="muted">${t('groups')[x.group]}${x.apt?' · '+t('aptTag'):''}</div><h2>${nm}</h2><p><b>${t('measures')}</b> ${meas}</p><p>${instr}</p><div class="row"><button class="primary" id="go">${t('begin')}</button><button onclick="home()">${t('back')}</button></div></div>`;
  $('#go').onclick=()=>{if(['tonal','pitch','rhythm'].includes(id))ac();$('#exitBtn').style.display='';$('#langSw').style.display='none';x.run(stage,res=>{cleanup();saveResult(id,res);const r=RESULTS[id];
   stage.innerHTML=`<div class="card center"><h2>${t('doneTitle',nm)}</h2><p style="font-size:18px">${labelOf(id,r)}${bandChip(r.band)}</p><div class="row" style="justify-content:center"><button class="primary" onclick="home()">${t('backToBattery')}</button><button onclick="report()">${t('profileReport')}</button></div></div>`;});};}
 
-function report(){cleanup();applyLang();const R=RESULTS,P=L().rep;
- const sv=(R.pf||R.block)?(()=>{const ps=[R.pf,R.block].filter(Boolean).map(r=>r.pct);const p=ps.reduce((a,b)=>a+b,0)/ps.length;return{pct:p,band:p<38?'Low':p>=68?'High':'Average',label:P.composite(ps.length)};})():null;
- const rows=GROUPS.map(g=>{const ts=TESTS.filter(x=>x.group===g);let h=`<tr class="grp"><td colspan="4">${t('groups')[g]}</td></tr>`;
-  if(g==='Spatial')h+=`<tr><td><b>${P.sv}</b></td><td>${sv?sv.label:'—'}</td><td>${sv?bandChip(sv.band):''}</td><td>${sv?`<div class="bar"><i style="width:${sv.pct}%"></i></div>`:''}</td></tr>`;
-  ts.forEach(x=>{const r=R[x.id];h+=`<tr><td>${TN(x.id)}</td><td>${r?labelOf(x.id,r):`<span class="muted">${P.notTaken}</span>`}</td><td>${r?bandChip(r.band):''}</td><td>${r&&r.pct!=null?`<div class="bar"><i style="width:${r.pct}%"></i></div>`:''}</td></tr>`;});return h;}).join('');
+function profile(R,P){const sv=(R.pf||R.block)?(()=>{const ps=[R.pf,R.block].filter(Boolean).map(r=>r.pct);const p=ps.reduce((a,b)=>a+b,0)/ps.length;return{pct:p,band:p<38?'Low':p>=68?'High':'Average',label:P.composite(ps.length)};})():null;
  const style=R.wa?R.wa.style:null;let core='';
  if(sv&&style){const hi=sv.band==='High',lo=sv.band==='Low',obj=style==='Objective',subj=style==='Subjective';
   core=hi&&subj?P.core.ts:hi&&obj?P.core.tg:lo&&subj?P.core.ns:lo&&obj?P.core.g:P.core.mix;}
+ return{sv,style,core};}
+function report(){cleanup();applyLang();const R=RESULTS,P=L().rep;
+ const{sv,style,core}=profile(R,P);
+ const rows=GROUPS.map(g=>{const ts=TESTS.filter(x=>x.group===g);let h=`<tr class="grp"><td colspan="4">${t('groups')[g]}</td></tr>`;
+  if(g==='Spatial')h+=`<tr><td><b>${P.sv}</b></td><td>${sv?sv.label:'—'}</td><td>${sv?bandChip(sv.band):''}</td><td>${sv?`<div class="bar"><i style="width:${sv.pct}%"></i></div>`:''}</td></tr>`;
+  ts.forEach(x=>{const r=R[x.id];h+=`<tr><td>${TN(x.id)}</td><td>${r?labelOf(x.id,r):`<span class="muted">${P.notTaken}</span>`}</td><td>${r?bandChip(r.band):''}</td><td>${r&&r.pct!=null?`<div class="bar"><i style="width:${r.pct}%"></i></div>`:''}</td></tr>`;});return h;}).join('');
  const strong=Object.entries(P.hints).map(([k,hint])=>{const r=k==='sv'?sv:R[k];return r&&r.band==='High'?`<li><b>${k==='sv'?P.sv:TN(k)}</b> — ${hint}</li>`:'';}).join('');
- stage.innerHTML=`<div class="card"><div class="row" style="justify-content:space-between"><h2>${P.title}</h2><div class="row noprint"><button onclick="window.print()">${P.print}</button><button onclick="home()">${t('back')}</button></div></div>
+ stage.innerHTML=`<div class="card"><div class="row" style="justify-content:space-between"><h2>${P.title}</h2><div class="row noprint"><span class="muted aiMsg"></span><button onclick="copyForAI(this)">${t('aiCopy')}</button><button onclick="window.print()">${P.print}</button><button onclick="home()">${t('back')}</button></div></div>
   <p class="muted">${P.note} ${new Date().toLocaleDateString(LNG==='uk'?'uk-UA':'en-US')}</p>
   <table class="report" style="width:100%;border-collapse:collapse"><tr><th>${P.th[0]}</th><th>${P.th[1]}</th><th>${P.th[2]}</th><th></th></tr>${rows}</table></div>
   <div class="card"><h3>${P.coreH}</h3><p>${core||P.core.need}</p>${R.idea&&R.idea.band==='High'?P.ideaHigh:''}
   <h3>${P.strongH}</h3>${strong?`<ul>${strong}</ul>`:`<p class="muted">${P.noHigh}</p>`}${R.vd?P.vd(R.vd.vd1,R.vd.vd2):''}
   <h3>${P.howH}</h3>${P.how}</div>`;}
-function exportJSON(){const b=new Blob([JSON.stringify(RESULTS,null,1)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='aptitude-results.json';a.click();}
-function importJSON(inp){const f=inp.files[0];if(!f)return;f.text().then(s=>{try{RESULTS=JSON.parse(s);store.set(RESULTS);home();}catch(e){alert(t('importErr'));}});}
+const strip=s=>String(s==null?'':s).replace(/<br\s*\/?>/g,' ').replace(/<[^>]+>/g,'').replace(/\s*—\s*/g,': ').replace(/\s+/g,' ').trim();
+const WORK_STYLE={Objective:'Objective: many common word-association responses. JOCRF links this to a collaborative, generalist style: working with and through people, in broad roles.',
+ Subjective:'Subjective: few common word-association responses. JOCRF links this to an individual, specialist style: going deep on work you do yourself.',
+ Mid:'Mid-range: between the two styles, so either kind of role may fit.'};
+function aiExport(){const R=RESULTS,E=LANG.en,P=E.rep,{sv,style,core}=profile(R,P);
+ const skip=['raw','max','band','pct','lang','date','text','lines','responses','label'];
+ const tests=GROUPS.flatMap(g=>TESTS.filter(x=>x.group===g)).map(x=>{const r=R[x.id],o={id:x.id,test:E.tests[x.id][0],group:x.group,counts_as_aptitude:x.apt,what_it_measures:strip(E.tests[x.id][1])};
+  if(!r)return{...o,status:'not taken'};
+  let sum;try{sum=strip(E.lab[x.id](r));}catch(e){sum='';}
+  const det=Object.fromEntries(Object.entries(r).filter(([k,v])=>!skip.includes(k)&&v!=null));
+  return{...o,status:'taken',score_summary:sum,raw_score:r.raw,max_score:r.max,band:r.band||'not banded',percent_of_max:r.pct!=null?Math.round(r.pct):null,...(Object.keys(det).length?{details:det}:{}),taken_on:r.date?r.date.slice(0,10):null};});
+ const hiKeys=Object.keys(P.hints).filter(k=>(k==='sv'?sv:R[k])?.band==='High');
+ const lows=TESTS.filter(x=>x.apt&&R[x.id]&&R[x.id].band==='Low').map(x=>E.tests[x.id][0]);
+ const nApt=TESTS.filter(x=>x.apt&&R[x.id]).length;
+ return{
+  what_this_is:"Results of a self-administered, browser-based aptitude battery modeled on the structure of the Johnson O'Connor Research Foundation (JOCRF) battery: 21 aptitudes in the same groups, plus work style (word association), vocabulary and writing speed. The test items are original, not JOCRF material, and the site has no connection to JOCRF.",
+  instructions_for_ai:["Act as a career advisor who knows the JOCRF aptitude approach: good-fit work uses a person's High aptitudes and does not lean on their Low ones.",
+   "1. Summarize my aptitude profile in plain language: strengths, weaker areas and my core pattern.",
+   "2. Suggest 8 to 12 specific jobs or career directions that fit this profile, with one sentence each on which aptitudes it uses.",
+   "3. Name a few kinds of work that may feel draining given my Low aptitudes, and explain why.",
+   "4. Say which untaken tests would most change your advice.",
+   "5. Ask me up to 3 short questions about my interests, values, education and situation, then refine the advice when I answer.",
+   "Treat the scores as rough self-assessment, not validated percentiles. Be specific and practical.",
+   "Reply in "+(LNG==='uk'?'Ukrainian':'English')+"."],
+  scoring_notes:["Scores are raw scores. Bands (Low, Average, High) are rough cut-offs set by each test's difficulty, not percentiles against an age-matched population.",
+   "Screens, speakers and mice can affect some results, especially the motor, auditory and speed tests.",
+   "Tests marked counts_as_aptitude=false (Writing Speed, Word Association, Vocabulary) are not aptitudes: Writing Speed adjusts Ideaphoria for typing speed, Word Association gives work style, Vocabulary is learned knowledge that can be raised.",
+   "Color Discrimination's raw score is an error score: lower is better.",
+   "Visual Designs has no band: it records taste (how often the complex and the off-center design were chosen)."],
+  summary:{aptitudes_completed:nApt+' of 21',
+   structural_visualization:sv?{band:sv.band,percent:Math.round(sv.pct),based_on:sv.label+' (Block Rotation and/or Paper Folding)'}:'not available: take Block Rotation and Paper Folding',
+   work_style:style?WORK_STYLE[style]:'not available: take Word Association',
+   core_pattern:core?strip(core):strip(P.core.need),
+   high_aptitudes_and_typical_fields:hiKeys.map(k=>({aptitude:k==='sv'?P.sv:E.tests[k][0],typical_fields:P.hints[k]})),
+   low_aptitudes:lows},
+  results:tests,
+  exported_on:new Date().toISOString().slice(0,10),
+  raw_data_for_reimport:R};}
+function aiText(){return JSON.stringify(aiExport(),null,1);}
+function copyForAI(btn){const txt=aiText(),msg=$('.aiMsg',btn.closest('.card'));
+ const ok=()=>{if(msg){msg.textContent=t('aiCopied');later(()=>{msg.textContent='';},4000);}},fail=()=>{if(msg)msg.textContent=t('aiFail');};
+ const legacy=()=>{const ta=document.createElement('textarea');ta.value=txt;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();let r=false;try{r=document.execCommand('copy');}catch(e){}ta.remove();r?ok():fail();};
+ if(navigator.clipboard&&window.isSecureContext)navigator.clipboard.writeText(txt).then(ok,legacy);else legacy();}
+function exportJSON(){const b=new Blob([aiText()],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='aptitude-results.json';a.click();}
+function importJSON(inp){const f=inp.files[0];if(!f)return;f.text().then(s=>{try{const d=JSON.parse(s);RESULTS=d.raw_data_for_reimport||d;store.set(RESULTS);home();}catch(e){alert(t('importErr'));}});}
 home();
 </script>
 </body>
