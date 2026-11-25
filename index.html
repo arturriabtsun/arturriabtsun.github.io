@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>21-Aptitude Battery</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Inter+Tight:wght@600;700;800&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+:root{--frame:#000;--sheet:#fff;--panel:#faf9f7;--ink:#0b0b0c;--ink2:#3a3a3c;--mute:#8a8a8e;--line:#ecebe8;--soft:#f2f1ee;--red:#ff3b30;--orange:#ff9f0a;--green:#1f9d55;--blue:#2f6fdb}
+*{box-sizing:border-box}
+html{background:var(--frame)}
+body{margin:0;font-family:"Inter",-apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,sans-serif;color:var(--ink);line-height:1.5;background:var(--frame);-webkit-font-smoothing:antialiased;font-feature-settings:"cv11","ss01"}
+::selection{background:rgba(255,59,48,.2)}
+header.top{display:flex;gap:12px;align-items:center;justify-content:space-between;padding:16px max(24px,calc((100vw - 1340px)/2 + 24px));position:sticky;top:0;z-index:5;background:var(--frame);color:#fff}
+header.top h1{font-family:"Inter Tight","Inter",sans-serif;font-size:21px;margin:0;font-weight:700;cursor:pointer;letter-spacing:-.6px;display:flex;align-items:center;gap:10px}
+header.top h1::before{content:"21";display:grid;place-items:center;width:34px;height:34px;border-radius:10px;font-size:14px;letter-spacing:-.5px;color:#fff;background:linear-gradient(160deg,#ff5a4e,#e0241a);box-shadow:inset 0 -2px 4px rgba(0,0,0,.25),inset 0 1px 1px rgba(255,255,255,.35)}
+#timer{font-variant-numeric:tabular-nums;font-weight:650;font-size:15px;color:var(--red);background:#1c1c1e;border-radius:99px;padding:6px 14px;min-width:0}
+#timer:empty{display:none}
+main{max-width:1340px;margin:6px auto 0;padding:72px 24px 96px;background:var(--sheet);border-radius:56px 56px 0 0;min-height:calc(100vh - 72px)}
+main>*{max-width:1000px;margin-left:auto;margin-right:auto}
+.card{background:var(--sheet);border:1px solid var(--line);border-radius:28px;padding:28px 32px;margin-bottom:20px}
+h2{font-family:"Inter Tight","Inter",sans-serif;font-size:32px;margin:0 0 10px;letter-spacing:-1.2px;font-weight:700;line-height:1.1}
+h3{font-family:"Inter Tight","Inter",sans-serif;font-size:24px;margin:4px 0 14px;font-weight:700;letter-spacing:-.6px;color:var(--ink)}
+.muted{color:var(--mute);font-size:13px}
+a{color:var(--ink)}
+b,strong{font-weight:650}
+/* hero */
+.card.hero{border:none;padding:8px 0 56px;text-align:center;color:var(--ink2);font-size:19px;line-height:1.6;max-width:860px}
+.card.hero h2{font-size:clamp(46px,7.6vw,96px);line-height:.98;letter-spacing:-.05em;font-weight:800;color:var(--ink);margin:0 auto 26px;max-width:12ch}
+.card.hero .muted{font-size:13.5px;max-width:640px;margin:18px auto 0;line-height:1.6}
+.card.hero .row{justify-content:center;margin-top:30px;font-size:15px;color:var(--mute)}
+.card.hero .row b{color:var(--ink)}
+.card.hero button.primary{padding:16px 30px;font-size:17px}
+/* buttons */
+button{font:inherit;font-size:14px;font-weight:600;border:none;background:var(--soft);border-radius:99px;padding:11px 20px;cursor:pointer;color:var(--ink);transition:transform .15s,background .15s,box-shadow .15s}
+button:hover{background:#e8e7e3}
+button:active{transform:scale(.97)}
+button.primary{background:var(--ink);color:#fff;box-shadow:0 10px 24px -12px rgba(0,0,0,.55)}
+button.primary:hover{background:#2a2a2c}
+button.ghost{background:#fff;color:#000}
+button.ghost:hover{background:#e9e9e9}
+button:disabled{opacity:.3;cursor:default;transform:none}
+#langSw{display:inline-flex;padding:4px;border-radius:99px;background:#fff}
+#langSw button{border-radius:99px;padding:6px 13px;font-size:12.5px;background:transparent;color:#000}
+#langSw button.on{background:#000;color:#fff}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.center{text-align:center}
+.big{font-family:"Inter Tight","Inter",sans-serif;font-size:40px;letter-spacing:-.5px;font-weight:700}
+.mono{font-family:"JetBrains Mono",ui-monospace,"SF Mono",Menlo,monospace}
+input[type=text],input[type=number],textarea{font:inherit;font-size:16px;padding:13px 16px;border:1px solid var(--line);border-radius:16px;width:100%;background:var(--panel);color:var(--ink);transition:border-color .15s,box-shadow .15s,background .15s}
+input:focus,textarea:focus{outline:none;background:#fff;border-color:#d6d4cf;box-shadow:0 0 0 4px rgba(0,0,0,.05)}
+textarea{min-height:260px;resize:vertical}
+/* session cards look like the app window: dark frame, traffic lights, warm inner panel */
+.card:has(.test-list){background:#161617;border:none;border-radius:30px;padding:46px 12px 12px;position:relative;box-shadow:0 40px 80px -40px rgba(0,0,0,.5)}
+.card:has(.test-list)::before{content:"";position:absolute;left:22px;top:19px;width:52px;height:12px;background:radial-gradient(circle 6px at 6px 6px,#ff5f57 98%,transparent) 0 0/20px 12px no-repeat,radial-gradient(circle 6px at 6px 6px,#febc2e 98%,transparent) 20px 0/20px 12px no-repeat,radial-gradient(circle 6px at 6px 6px,#28c840 98%,transparent) 40px 0/12px 12px no-repeat}
+.card:has(.test-list) h3{position:absolute;top:13px;left:0;right:0;text-align:center;font-family:"Inter",sans-serif;font-size:13px;font-weight:550;letter-spacing:0;color:#9a9a9e;margin:0;padding:0 90px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card:has(.test-list)>.muted{color:#8a8a8e;padding:0 14px 12px;text-align:center}
+.test-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:0 28px;background:var(--panel);border-radius:20px;padding:10px 24px}
+.tile{display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid var(--line)}
+.tile::before{content:"";flex:none;width:20px;height:20px;border-radius:50%;border:2px solid #cfcdc8;box-sizing:border-box;transition:border-color .15s}
+.tile:hover::before{border-color:var(--ink)}
+.tile.done::before{content:"✓";display:grid;place-items:center;border:none;background:var(--ink);color:#fff;font-size:12px;font-weight:700}
+.tile>div{flex:1;min-width:0}
+.tile .nm{font-weight:550;font-size:15px;display:block;letter-spacing:-.1px}
+.tile.done .nm{color:var(--ink2)}
+.tile .muted{font-size:12.5px}
+.tile button{flex:none;padding:7px 15px;font-size:13px}
+.tile button:not(.primary){background:#fff;border:1px solid var(--line)}
+.chip{display:inline-block;font-size:11px;font-weight:650;padding:2px 8px;border-radius:6px;background:var(--soft);color:var(--ink2);vertical-align:1px}
+.chip.Low{background:#fff1df;color:#d97a00}
+.chip.Average{background:#e8effc;color:var(--blue)}
+.chip.High{background:#e2f5e9;color:var(--green)}
+.bar{height:6px;background:var(--soft);border-radius:99px;overflow:hidden;min-width:120px}
+.bar>i{display:block;height:100%;background:var(--ink);border-radius:99px}
+/* test screens */
+.card.center{padding:36px 32px}
+.card svg:not(#bd){background:var(--panel);border-radius:18px}
+.card.center>.row{margin-top:18px}
+.opts{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-top:18px}
+.opt{display:flex;flex-direction:column;align-items:center;gap:6px;padding:10px;border-radius:22px;background:#fff;border:1px solid var(--line)}
+.opt:hover{border-color:#d6d4cf;background:#fff}
+.steps{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:center}
+.ind-row{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin:18px 0}
+.ind{padding:6px;border-radius:22px;background:#fff;border:1px solid var(--line)}
+.ind.sel{outline:2.5px solid var(--red);outline-offset:2px;background:#fff4f3}
+.tree{display:grid;grid-template-columns:repeat(4,1fr);gap:12px 10px;margin:18px 0}
+.slot{min-height:48px;border:1.5px dashed #d9d7d1;border-radius:14px;display:flex;align-items:center;justify-content:center;padding:4px;font-weight:550;cursor:pointer;background:var(--panel);text-align:center}
+.slot.filled{border:1.5px solid var(--ink);background:#fff}
+.pool{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;min-height:44px}
+.wchip{padding:9px 16px;border-radius:99px;background:var(--soft);cursor:pointer;font-weight:550;font-size:14px;transition:background .15s}
+.wchip:hover{background:#e8e7e3}
+.wchip.sel{background:var(--red);color:#fff}
+.eq{display:flex;gap:10px;align-items:center;justify-content:center;font-size:28px;font-weight:600;margin:12px 0}
+.eq .slot{width:62px;min-height:54px;font-size:22px}
+.scene{display:grid;grid-template-columns:repeat(4,84px);grid-template-rows:repeat(3,76px);gap:6px;justify-content:center;margin:14px auto}
+.cell{border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:38px;user-select:none;background:var(--panel)}
+.scene.click .cell{cursor:pointer;background:var(--soft)}
+.scene.click .cell:hover{background:#ffe9e7}
+.caps{display:flex;gap:5px;flex-wrap:wrap;margin:8px 0 18px;align-items:center}
+.cap{width:42px;height:42px;border-radius:50%;border:2px solid transparent;cursor:pointer;transition:transform .12s}
+.cap.anchor{border-radius:12px;cursor:default;border-color:var(--ink)}
+.cap.sel{border-color:var(--ink);transform:scale(1.14)}
+.pairpick{display:flex;gap:18px;justify-content:center;flex-wrap:wrap}
+.pairpick button{padding:10px;border-radius:24px;background:#fff;border:1px solid var(--line)}
+.report td,.report th{padding:12px 10px;border-bottom:1px solid var(--line);text-align:left;font-size:14px;vertical-align:middle}
+.report th{font-size:11.5px;color:var(--mute);font-weight:600;text-transform:uppercase;letter-spacing:.8px}
+.grp td{background:transparent;font-family:"Inter Tight","Inter",sans-serif;font-weight:700;font-size:17px;letter-spacing:-.3px;padding-top:26px;color:var(--ink)}
+.kbd{font-family:"JetBrains Mono",monospace;font-size:12px;border:1px solid var(--line);border-bottom-width:2px;border-radius:6px;padding:0 6px;background:#fff}
+@media (max-width:640px){main{border-radius:32px 32px 0 0;padding:44px 14px 64px}.card{padding:22px 20px}.test-list{padding:4px 16px;grid-template-columns:1fr}.card.hero{font-size:17px}}
+@media print{header.top,.noprint{display:none}html,body{background:#fff}main{padding:0;border-radius:0}.card{border:none;padding:0}}
+/* light theme */
+html[data-theme=light]{--frame:#efeee9}
+[data-theme=light] header.top{color:var(--ink)}
+[data-theme=light] main{box-shadow:0 0 0 1px #e4e2dc,0 30px 70px -40px rgba(0,0,0,.22)}
+[data-theme=light] #timer{background:#fff;box-shadow:0 0 0 1px #e4e2dc}
+[data-theme=light] button.ghost{background:var(--ink);color:#fff}
+[data-theme=light] button.ghost:hover{background:#2a2a2c}
+[data-theme=light] #langSw{background:var(--ink)}
+[data-theme=light] #langSw button{color:#fff}
+[data-theme=light] #langSw button.on{background:#fff;color:var(--ink)}
+[data-theme=light] .card:has(.test-list){background:#e8e7e2;box-shadow:0 30px 60px -40px rgba(0,0,0,.25),inset 0 0 0 1px #dedcd6}
+[data-theme=light] .card:has(.test-list) h3{color:#6e6e73}
+[data-theme=light] .test-list{background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.05)}
+[data-theme=light] .tile button:not(.primary){background:var(--soft);border-color:transparent}
+/* theme toggle */
+#themeBtn{width:38px;height:38px;padding:0;display:grid;place-items:center;border-radius:50%;background:#1c1c1e;color:#fff}
+#themeBtn:hover{background:#2c2c2e}
+[data-theme=light] #themeBtn{background:#fff;color:var(--ink);box-shadow:0 0 0 1px #e4e2dc}
+[data-theme=light] #themeBtn:hover{background:#f7f6f3}
+#themeBtn svg{width:18px;height:18px;background:none}
+#themeBtn .moon,[data-theme=light] #themeBtn .sun{display:none}
+[data-theme=light] #themeBtn .moon{display:block}
+</style>
+<script>(function(){var t;try{t=localStorage.getItem('aptTheme')}catch(e){}if(!t)t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';document.documentElement.dataset.theme=t;})();</script>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+ <defs>
+  <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#b8502f"/></marker>
+  <clipPath id="halfL"><rect x="-50" y="-50" width="50" height="100"/></clipPath>
+ </defs>
+</svg>
+<header class="top">
+ <h1 id="ttl" onclick="home()"></h1>
+ <div class="row"><span id="timer"></span><button class="ghost noprint" id="exitBtn" style="display:none" onclick="home()"></button>
+  <button class="noprint" id="themeBtn" onclick="toggleTheme()" title="Light / dark" aria-label="Light / dark"><svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2M12 19.5v2M4.6 4.6l1.4 1.4M18 18l1.4 1.4M2.5 12h2M19.5 12h2M4.6 19.4L6 18M18 6l1.4-1.4"/></svg><svg class="moon" viewBox="0 0 24 24" fill="currentColor"><path d="M20.5 14.6A8.5 8.5 0 0 1 9.4 3.5a8.5 8.5 0 1 0 11.1 11.1z"/></svg></button>
+  <span id="langSw" class="noprint"><button data-l="en" onclick="setLang('en')">EN</button><button data-l="uk" onclick="setLang('uk')">УК</button></span></div>
+</header>
+<main id="stage"></main>
+
+<script>
+/* ================= LANGUAGE PACKS ================= */
+const frac=r=>`${r.raw} / ${r.max}`;
+const LANG={
+en:{
+ ui:{title:'21-Aptitude Battery',exit:'Exit test',begin:'Begin',back:'Back',start:'Start',retake:'Retake',submit:'Submit',done:'Done',ready:'Ready',skip:'Skip',enter:'Enter',play:'Play',clear:'Clear',save:'Save',
+  measures:'Measures:',aptTag:'aptitude',nonApt:'(non-aptitude)',minutes:m=>`~${m} min`,item:(i,n)=>`Item ${i} of ${n}`,itemN:i=>`Item ${i}`,ofN:(i,n)=>`${i} of ${n}`,
+  band:{Low:'Low',Average:'Average',High:'High'},styles:{Objective:'Objective',Mid:'Mid-range',Subjective:'Subjective'},
+  groups:{'Spatial':'Spatial','Divergent thinking':'Divergent thinking','Convergent thinking':'Convergent thinking','Numerical':'Numerical','Perceptual speed':'Perceptual speed','Auditory':'Auditory','Visual':'Visual','Language':'Language','Motor':'Motor','Personality':'Personality','Knowledge':'Knowledge','Control':'Control'},
+  h2:'Aptitude battery: 21 aptitudes',
+  intro:`<p>A browser-based version of the Johnson O'Connor Research Foundation (JOCRF) aptitude battery that follows its <b>structure</b>: the same 21 aptitudes in the same groups, plus extra measures of work style (word association), vocabulary and writing speed.</p><p>All test items are newly written. This is not JOCRF's official material, and it has no connection to the Foundation.</p>
+  <p class="muted">Scores are raw scores with <b>rough Low, Average and High bands</b> based on test difficulty. They are not percentiles compared with people your age; only real norms can give that. Your screen, speakers and mouse can also affect some results. Use the profile for self-exploration. For a validated result, take the test with JOCRF.</p>`,
+  completed:n=>`<b>${n} / 21</b> aptitudes completed`,viewReport:'View profile report',
+  s1:'Session 1: reasoning, ideas, numbers, words (~60 min)',s2:'Session 2: spatial, auditory, visual, motor (~45 min)',audioNote:'Auditory tests need headphones or speakers.',
+  export:'Export results',import:'Import results',reset:'Reset all',confirmReset:'Delete all saved results?',importErr:'Could not read that file.',
+  doneTitle:n=>`${n} — done`,backToBattery:'Back to battery',profileReport:'Profile report',langTag:l=>` <span class="muted">(${l==='uk'?'Ukrainian version':'English version'})</span>`,
+  distractor:'Short break task — answer these sums until the timer ends (not scored)',
+  sameS:'Same (S)',mirrorD:'Mirror (D)',pfQ:'Which shows the sheet unfolded?',indRow:i=>`Row ${i} of 20 — choose the three that belong together`,chart:i=>`Chart ${i} of 12`,
+  memorize:'Memorize',typeEach:'Type each number',sameF:'Same (F)',diffJ:'Different (J)',pressPlay:'Press Play when ready.',listen:'Listen…',whichNote:'Which note changed?',notes:n=>`${n} notes`,
+  higher:'Higher ↑',lower:'Lower ↓',secondWas:'Second tone was…',sameS2:'Same (S)',diffD:'Different (D)',sameOrDiff:'Same or different?',
+  mdMem:i=>`Design ${i} of 10 — memorize`,mdRedraw:i=>`Design ${i} of 10 — redraw it`,obsStudy:i=>`Item ${i} of 12 — study`,obsTap:i=>`Item ${i} of 12 — tap where it changed`,
+  vdPair:i=>`Pair ${i} of 20 — which do you prefer?`,silStudy:'Study these pairs',silType:'Type the made-up word for each',drawing:k=>`Drawing ${k} of 3`,foreHolder:'One possibility per line…',
+  topic:'Topic',ideaHolder:'Start writing…',gripL:'Left (kg)',gripR:'Right (kg)'},
+ tests:{
+  block:['Block Rotation (Wiggly Block proxy)','Seeing and manipulating three-dimensional objects in your mind.','Each item shows two block figures. Decide whether the right figure is the <b>same</b> object as the left one turned to a new angle, or a <b>mirror image</b> that can never be turned to match. Keys: <span class="kbd">S</span> same, <span class="kbd">D</span> mirror. 16 items, 4 minutes. Score = right − wrong. <br><i>JOCRF uses a physical wooden puzzle here; this is a screen-based stand-in.</i>'],
+  pf:['Paper Folding','Visualizing in three dimensions: picturing a folded, punched sheet once it is opened.','A square sheet is folded one or more times (the shaded flap folds over along the dashed line, following the arrow). A hole is then punched through every layer. Choose which picture shows the sheet fully unfolded. 12 items, 4 minutes.'],
+  ws:['Writing Speed (control)','Plain typing speed, used to adjust the Ideaphoria score so a slow typist is not mistaken for a slow idea-generator.','Type the sentence shown, over and over, as fast as you comfortably can, for 60 seconds.'],
+  idea:['Ideaphoria','Rate of flow of ideas — how quickly ideas come to you, not how good they are.','You will get a topic. Write (type) as much as you can about it for 5 minutes. Quality, spelling and polish do not matter — only how much you produce. Keep going the whole time. <br><i>Tip: take the Writing Speed test first so your score can be adjusted for typing speed.</i>'],
+  fore:['Foresight','Seeing possibilities — linked to setting and needing long-range goals.','You will see three simple drawings, two minutes each. List as many things as each drawing <b>could be</b>, one per line (press Enter after each). Any interpretation counts.'],
+  ind:['Inductive Reasoning','Connecting the dots quickly — drawing a conclusion from scattered facts, as in diagnosis.','Each row has six pictures. Exactly <b>three</b> share one feature (shape, color, fill, size, or inner mark) that the other three lack. Select those three and press Submit (or Enter). 20 rows, 5 minutes.'],
+  ana:['Analytical Reasoning','Organizing and classifying information into a logical structure; understanding systems.','Place the seven word chips into the chart: the most general word at the top, two categories in the middle, and two members under each category. Tap a chip, then tap a slot (tap a filled slot to empty it). 12 charts, 6 minutes.'],
+  nr:['Numerical Reasoning','Finding patterns and rules in numbers.','Each item shows a series of numbers built by a rule. Type the next number and press Enter (or Skip). 18 items, 6 minutes.'],
+  nf:['Number Facility','Speed and ease with mental arithmetic.','Fill both equations using the number chips (each chip once; some later items include spare chips). Tap a chip to drop it into the next empty box; tap a box to take it back. It checks itself when all four boxes are full. As many as you can in 4 minutes.'],
+  nm:['Number Memory','Remembering numerical information.','You will see eight six-digit numbers, each with a label. Study them for 90 seconds (or press Ready sooner). After a 30-second break task, type each number next to its label. Every digit in the right place scores a point (max 48).'],
+  gr:['Graphoria','Clerical speed and accuracy — fast visual processing of detail.','Pairs of numbers appear one at a time. Decide as fast as you can whether they are exactly the same. Keys: <span class="kbd">F</span> same, <span class="kbd">J</span> different. 90 seconds. Score = right − wrong.'],
+  tonal:['Tonal Memory','Remembering a sequence of notes.','Use headphones or speakers. A short melody plays, then plays again with <b>one</b> note changed. Choose which note (1, 2, 3…) was different. Melodies get longer. 12 items. Each plays once.'],
+  pitch:['Pitch Discrimination','Hearing fine differences between tones.','Two tones play. Was the <b>second</b> one higher or lower? Differences shrink as you go. Keys: <span class="kbd">↑</span> higher, <span class="kbd">↓</span> lower. 30 items.'],
+  rhythm:['Rhythm Memory','Remembering rhythmic patterns.','Two click rhythms play. Are they the <b>same</b> or <b>different</b>? Keys: <span class="kbd">S</span> same, <span class="kbd">D</span> different. 20 items, getting longer.'],
+  md:['Memory for Design','Remembering abstract line drawings, charts and diagrams.','A line design on a grid of dots appears for a few seconds. Then redraw it: tap one dot, then a neighboring dot, to draw (or erase) the line between them. Press Done when finished. 10 designs.'],
+  obs:['Observation','Noticing and remembering small visual details.','A set of everyday objects appears for 6 seconds, then vanishes and returns with <b>one change</b>: something swapped, moved, removed or added. Tap the spot where the change happened. 12 items.'],
+  color:['Color Discrimination','Distinguishing subtle differences in hue.','Each row has a fixed square at both ends. Arrange the round caps between them into a smooth color gradient from one end to the other. Tap a cap, then tap the position you want to move it to. Use a well-lit, uncolored screen (night mode off). Press Done when all four rows look right. Lower error score is better.'],
+  vd:['Visual Designs (Artistic Judgment)','Your preferences in visual composition: simple vs. complex (I) and balanced vs. off-center (II).','Twenty pairs of small abstract compositions. For each pair, tap the one you like better. Go with your first reaction — there are no right answers here.'],
+  sil:['Silograms','Ease of learning new words — useful for foreign languages and technical vocabularies.','You will see 18 English words, each paired with a made-up word. Study them (up to 2½ minutes). After a short break task, type the made-up word for each English word. Near-misses (one letter off) earn half credit.'],
+  finger:['Finger Dexterity (proxy)','Quick, accurate fine-motor work. JOCRF uses a pegboard; this screen version only approximates it with rapid precise tapping.','Tap (or click) the highlighted hole as fast as you can; a new one lights up each time. 30 seconds. Use the same input device each time you retake it.'],
+  tweezer:['Tweezer Dexterity (proxy)','Handling small tools precisely. JOCRF uses real tweezers and pins; this drag-and-drop version is a rough stand-in.','Drag the tiny pin from the tray on the left into the highlighted hole. It only counts if you drop it right on the hole. 60 seconds.'],
+  grip:['Grip Strength','Hand strength, which JOCRF relates to how much physical activity a person may want in their work. Needs a hand dynamometer.','If you have a hand dynamometer (or a smart grip trainer), squeeze as hard as you can with each hand and enter the readings in kg. Otherwise skip it — a screen cannot measure this.'],
+  wa:['Word Association (work style)','Whether your associations run with the crowd (Objective — collaborative generalist) or are your own (Subjective — individual specialist).',"A word appears. Type the <b>first</b> word that comes to mind and press Enter. Don't think about it — speed matters. 30 words."],
+  vocab:['English Vocabulary','Current word knowledge — learned, not innate, and can be raised with effort.',"Choose the word closest in meaning to the word in bold. Items get harder. If you don't know, make your best guess. 30 items, 12-minute limit."]},
+ lab:{block:r=>`${r.raw} / 16 (net)`,pf:frac,ws:r=>`${r.raw} words/min`,idea:r=>`${r.raw} words`+(r.ratio!=null?` · ${Math.round(r.ratio*100)}% of your typing speed`:''),
+  fore:r=>`${r.raw} possibilities`,ind:frac,ana:frac,nr:frac,nf:r=>`${r.raw} solved (${r.wrong} wrong)`,nm:r=>`${r.raw} / 48 digits`,gr:r=>`${r.raw} net (${r.correct} right, ${r.wrong} wrong)`,
+  tonal:frac,pitch:r=>`${r.raw} / 30 (${r.hard}/12 at ≤10 cents)`,rhythm:frac,md:r=>`${r.raw} / ${r.max} lines (${r.perfect} perfect)`,obs:frac,color:r=>`Error score ${r.raw} (0 = perfect)`,
+  vd:r=>`I: complex ${r.vd1}/10 · II: off-center ${r.vd2}/10`,sil:frac,finger:r=>`${r.raw} hits, ${r.miss} misses`,tweezer:r=>`${r.raw} placed (${r.drops-r.raw} misdrops)`,
+  grip:r=>r.skipped?'Skipped':`L ${r.l} kg · R ${r.r} kg`,wa:r=>`${r.raw} / 30 common responses → ${t('styles')[r.style]}`,vocab:frac},
+ rep:{title:'Aptitude profile',print:'Print / save PDF',note:'Raw scores with rough bands — not population percentiles.',th:['Test','Score','Band'],notTaken:'not taken',sv:'Structural Visualization',
+  composite:n=>`composite of ${n} test${n>1?'s':''}`,coreH:'Core pattern',
+  core:{ts:'<b>Technical specialist.</b> Strong 3-D thinking paired with an individual style: work where you go deep on hands-on or technical problems yourself — engineering design, research science, software, surgery, architecture.',
+   tg:'<b>Technical generalist.</b> Strong 3-D thinking paired with a collaborative style: technical work done through and with people — engineering management, applied science, construction or product management, primary-care medicine, technical teaching.',
+   ns:'<b>Non-technical specialist.</b> Ideas and abstractions rather than physical structures, with an individual style: depth in a field of knowledge — writing, research, law, editing, analysis, one-on-one counseling.',
+   g:'<b>Generalist.</b> People, ideas and systems rather than physical structures, with a collaborative style: broad roles that coordinate others — management, business, sales, teaching, marketing, HR, politics.',
+   mix:'<b>Mixed pattern.</b> Your spatial or work-style score sits in the middle, so you may fit either side — look at which kind of work has felt most natural, and lean on your strongest aptitudes below.',
+   need:'Take both spatial tests and the Word Association test to see your core pattern (Structural Visualization × work style).'},
+  ideaHigh:'<p>With a high <b>Ideaphoria</b> score, you will likely want work where ideas flow outward — explaining, persuading, teaching or creating — and may tire of repetitive tasks.</p>',
+  strongH:'Strongest aptitudes and where they tend to be used',noHigh:'No High bands yet.',
+  vd:(a,b)=>`<p><b>Visual Designs:</b> you chose the complex design ${a}/10 times and the off-center design ${b}/10 times. JOCRF compares these choices with professional artists' preferences; that key isn't public, so here they are shown simply as your taste.</p>`,
+  howH:'How to read this',how:"<p>The JOCRF approach is to look for work that <b>uses your high aptitudes</b> and doesn't lean on your low ones, then combine that with your interests, values and circumstances. Low scores aren't failures: a low Foresight score, for example, often goes with enjoying concrete, near-term goals. Vocabulary is the one score here that you can deliberately raise — focus on words you half-know.</p>",
+  hints:{sv:'engineering, architecture, surgery, mechanics, programming, physical sciences',idea:'teaching, writing, marketing, sales, counseling, law, consulting',
+   fore:'long-range goals: research, entrepreneurship, strategy, policy, degree paths',ind:'diagnosis and troubleshooting: medicine, law, journalism, IT support, research',
+   ana:'organizing systems: editing, programming, logistics, operations, systems analysis',nr:'finance, economics, data analysis, actuarial work, engineering',
+   nf:'accounting, estimating, bookkeeping, trading, retail operations',nm:'finance, aviation, dispatch, sales, executive support, statistics',
+   gr:'high-volume information work: administration, editing, records, compliance, data entry',tonal:'melodic instruments, singing, audio work, learning languages by ear',
+   pitch:'tuned instruments (strings, winds, voice), audio engineering, tuning',rhythm:'percussion, piano, dance, rhythmic sports',
+   md:'graphic design, drafting, mapping, art history, reading charts and diagrams',obs:'quality control, inspection, law enforcement, field science, photography',
+   color:'interior design, photography, color matching, printing, art restoration',sil:'foreign languages, medical/legal/scientific terminology',
+   finger:'assembly, keyboard instruments, crafts, culinary work, lab work',tweezer:'surgery, dentistry, jewelry, electronics repair, lab work'}},
+ data:{
+  ws:'The quick brown fox jumps over the lazy dog.',
+  topics:['If people no longer needed to sleep, how would daily life change?','Describe everything that would make a perfect town square.','What could a family do with an empty warehouse for one year?','Imagine every home got a robot helper tomorrow. What happens next?'],
+  nmLabels:['Locker','Invoice','Room','Flight','Account','Order','Badge','Ticket','Gate','Permit'],
+  trees:[['Vehicle',['Land','Car','Bicycle'],['Water','Canoe','Ferry']],['Food',['Fruit','Apple','Mango'],['Vegetable','Carrot','Spinach']],
+   ['Shape',['Polygon','Triangle','Hexagon'],['Curved','Circle','Ellipse']],['Animal',['Mammal','Dolphin','Bat'],['Bird','Penguin','Ostrich']],
+   ['Instrument',['Strings','Violin','Cello'],['Percussion','Drum','Xylophone']],['Writing',['Fiction','Novel','Fable'],['Nonfiction','Memoir','Encyclopedia']],
+   ['Science',['Life science','Botany','Zoology'],['Physical science','Chemistry','Physics']],['Weather',['Precipitation','Hail','Drizzle'],['Wind','Gale','Breeze']],
+   ['Sport',['Team sport','Soccer','Volleyball'],['Solo sport','Archery','Fencing']],['Energy',['Renewable','Solar','Geothermal'],['Fossil fuel','Coal','Petroleum']],
+   ['Tool',['Cutting tool','Saw','Scissors'],['Measuring tool','Ruler','Caliper']],['Building',['Dwelling','Cottage','Apartment'],['Place of worship','Chapel','Mosque']]],
+  silWords:['river','candle','pencil','garden','window','horse','basket','mirror','ladder','button','forest','kettle','island','jacket','violin','carpet','bridge','pepper','rocket','lemon','anchor','tunnel','feather','castle'],
+  silC:'bdfgklmnprstvz',silV:'aeiou',
+  wa:[['hot','cold'],['up','down'],['salt','pepper'],['king','queen'],['bread','butter'],['needle','thread'],['doctor','nurse hospital'],['table','chair'],['black','white'],['boy','girl'],
+   ['dog','cat bark'],['night','day dark'],['fire','hot water burn smoke'],['apple','tree red fruit pie'],['sun','moon hot shine'],['river','water stream lake'],['bird','fly nest wing'],
+   ['chair','table sit'],['school','teacher learn book'],['ocean','sea water blue'],['sweet','sour candy sugar'],['bed','sleep'],['lamp','light'],['mountain','hill snow high'],
+   ['music','song sound note'],['window','door glass'],['spider','web'],['thunder','lightning storm'],['cheese','mouse'],['foot','shoe hand toe']],
+  voc:[['ancient','old','broken','holy','distant','hidden'],['rapid','fast','quiet','bright','heavy','angry'],['fragile','delicate','colorful','empty','sticky','loud'],
+   ['reluctant','unwilling','unable','unaware','unkind','unlucky'],['abundant','plentiful','scarce','heavy','absent','distant'],['candid','frank','sweet','careful','shy','bright'],
+   ['meticulous','precise','generous','nervous','sudden','clumsy'],['ominous','threatening','enormous','harmless','joyful','sacred'],['ambiguous','unclear','ambitious','hostile','confident','ordinary'],
+   ['tenacious','persistent','fragile','generous','timid','careless'],['benevolent','kind','wealthy','foolish','cruel','lazy'],['lethargic','sluggish','deadly','talkative','nervous','lawful'],
+   ['pragmatic','practical','dramatic','theoretical','bossy','sociable'],['ephemeral','short-lived','imaginary','heavenly','elaborate','ancient'],['laconic','terse','lazy','tearful','milky','gentle'],
+   ['obdurate','stubborn','obedient','overdue','obvious','shady'],['lugubrious','mournful','slippery','gigantic','greasy','luminous'],['perfunctory','cursory','perfect','punctual','essential','fragrant'],
+   ['phlegmatic','unemotional','sickly','talkative','pompous','sticky'],['obsequious','fawning','obscure','obstinate','obvious','offensive'],['recalcitrant','defiant','recurring','calculating','reclusive','regretful'],
+   ['sanguine','optimistic','pale','wise','mournful','sacred'],['callow','inexperienced','cruel','hollow','pale','cold'],['apocryphal','spurious','prophetic','catastrophic','apologetic','sacred'],
+   ['inchoate','rudimentary','furious','enclosed','eternal','sinful'],['pusillanimous','cowardly','tiny','generous','pious','stubborn'],['otiose','superfluous','enormous','odorous','ornate','hateful'],
+   ['jejune','insipid','joyful','lavish','sturdy','sudden'],['bowdlerize','expurgate','bully','bend','gamble','enlarge'],['tergiversate','equivocate','terminate','perspire','decorate','celebrate']]}},
+uk:{
+ ui:{title:'Батарея 21 здібності',exit:'Вийти з тесту',begin:'Почати',back:'Назад',start:'Почати',retake:'Пройти знову',submit:'Підтвердити',done:'Готово',ready:'Готово',skip:'Пропустити',enter:'Ввести',play:'Відтворити',clear:'Очистити',save:'Зберегти',
+  measures:'Вимірює:',aptTag:'здібність',nonApt:'(не здібність)',minutes:m=>`~${m} хв`,item:(i,n)=>`Завдання ${i} з ${n}`,itemN:i=>`Завдання ${i}`,ofN:(i,n)=>`${i} з ${n}`,
+  band:{Low:'Низький',Average:'Середній',High:'Високий'},styles:{Objective:'Об’єктивний',Mid:'Проміжний',Subjective:'Суб’єктивний'},
+  groups:{'Spatial':'Просторове мислення','Divergent thinking':'Дивергентне мислення','Convergent thinking':'Конвергентне мислення','Numerical':'Числові здібності','Perceptual speed':'Швидкість сприйняття','Auditory':'Слухові здібності','Visual':'Зорові здібності','Language':'Мовні здібності','Motor':'Моторика','Personality':'Особистість','Knowledge':'Знання','Control':'Контроль'},
+  h2:'Батарея тестів: 21 здібність',
+  intro:`<p>Браузерна версія батареї тестів Johnson O’Connor Research Foundation (JOCRF), що повторює її <b>структуру</b>: ті самі 21 здібність у тих самих групах, а також додаткові тести на стиль роботи (словесні асоціації), словниковий запас і швидкість письма.</p><p>Усі завдання створено заново. Це не офіційні матеріали JOCRF, і програма ніяк не пов’язана з Фундацією.</p>
+  <p class="muted">Результати показано як сирі бали з <b>приблизними рівнями Низький / Середній / Високий</b>, що залежать від складності тестів. Це не процентилі порівняно з однолітками: їх можуть дати лише справжні норми. На деякі результати також впливають екран, динаміки й миша. Сприймайте профіль як інструмент самопізнання, а для валідного результату пройдіть тестування в самому JOCRF.</p>`,
+  completed:n=>`Пройдено здібностей: <b>${n} / 21</b>`,viewReport:'Переглянути звіт-профіль',
+  s1:'Сесія 1: мислення, ідеї, числа, слова (~60 хв)',s2:'Сесія 2: простір, слух, зір, моторика (~45 хв)',audioNote:'Для слухових тестів потрібні навушники або колонки.',
+  export:'Експортувати результати',import:'Імпортувати результати',reset:'Скинути все',confirmReset:'Видалити всі збережені результати?',importErr:'Не вдалося прочитати цей файл.',
+  doneTitle:n=>`${n} — завершено`,backToBattery:'До переліку тестів',profileReport:'Звіт-профіль',langTag:l=>` <span class="muted">(${l==='uk'?'українська версія':'англійська версія'})</span>`,
+  distractor:'Коротка перерва — розв’язуйте ці приклади, доки не скінчиться час (не оцінюється)',
+  sameS:'Та сама (S)',mirrorD:'Дзеркальна (D)',pfQ:'Який вигляд має розгорнутий аркуш?',indRow:i=>`Ряд ${i} з 20 — оберіть три зображення зі спільною ознакою`,chart:i=>`Схема ${i} з 12`,
+  memorize:'Запам’ятайте',typeEach:'Введіть кожне число',sameF:'Однакові (F)',diffJ:'Різні (J)',pressPlay:'Натисніть «Відтворити», коли будете готові.',listen:'Слухайте…',whichNote:'Яка нота змінилася?',notes:n=>`нот: ${n}`,
+  higher:'Вище ↑',lower:'Нижче ↓',secondWas:'Другий тон був…',sameS2:'Однакові (S)',diffD:'Різні (D)',sameOrDiff:'Однакові чи різні?',
+  mdMem:i=>`Візерунок ${i} з 10 — запам’ятайте`,mdRedraw:i=>`Візерунок ${i} з 10 — відтворіть його`,obsStudy:i=>`Завдання ${i} з 12 — роздивіться`,obsTap:i=>`Завдання ${i} з 12 — торкніться місця зміни`,
+  vdPair:i=>`Пара ${i} з 20 — яка вам більше подобається?`,silStudy:'Вивчіть ці пари',silType:'Введіть вигадане слово для кожного',drawing:k=>`Малюнок ${k} з 3`,foreHolder:'Один варіант на рядок…',
+  topic:'Тема',ideaHolder:'Почніть писати…',gripL:'Ліва (кг)',gripR:'Права (кг)'},
+ tests:{
+  block:['Обертання блоків (замість Wiggly Block)','Уявлення тривимірних об’єктів і подумки маніпулювання ними.','У кожному завданні дві фігури з кубиків. Визначте, чи права фігура — <b>та сама</b>, що й ліва, лише повернута під іншим кутом, чи її <b>дзеркальне відображення</b>, яке жодним поворотом не суміститься з лівою. Клавіші: <span class="kbd">S</span> — та сама, <span class="kbd">D</span> — дзеркальна. 16 завдань, 4 хвилини. Бал = правильні − помилкові. <br><i>У JOCRF тут використовують фізичну дерев’яну головоломку; це екранна заміна.</i>'],
+  pf:['Складання паперу','Тривимірна уява: як виглядатиме складений і пробитий аркуш після розгортання.','Квадратний аркуш складають один або кілька разів (заштрихована частина перегинається по пунктирній лінії в напрямку стрілки). Потім крізь усі шари пробивають отвір. Оберіть, як виглядатиме повністю розгорнутий аркуш. 12 завдань, 4 хвилини.'],
+  ws:['Швидкість письма (контроль)','Звичайна швидкість набору тексту; використовується для коригування бала «Ідеафорії», щоб повільний набір не сприймався як повільний потік ідей.','Набирайте наведене речення знову і знову так швидко, як вам зручно, протягом 60 секунд.'],
+  idea:['Ідеафорія','Швидкість потоку ідей — як швидко до вас приходять ідеї, а не наскільки вони хороші.','Ви отримаєте тему. Пишіть (набирайте) про неї якомога більше протягом 5 хвилин. Якість, орфографія та стиль не важать — лише обсяг. Не зупиняйтеся весь цей час. <br><i>Порада: спершу пройдіть тест «Швидкість письма», щоб бал скоригувався з урахуванням швидкості набору.</i>'],
+  fore:['Передбачення (Foresight)','Здатність бачити можливості — пов’язана з постановкою довгострокових цілей і потребою в них.','Ви побачите три прості малюнки, по дві хвилини на кожен. Перелічіть якомога більше того, чим <b>може бути</b> кожен малюнок, по одному варіанту на рядок (Enter після кожного). Зараховується будь-яке тлумачення.'],
+  ind:['Індуктивне мислення','Швидке поєднання розрізнених фактів у висновок — як під час діагностики.','У кожному ряду шість зображень. Рівно <b>три</b> мають спільну ознаку (форма, колір, заливка, розмір чи внутрішня позначка), якої немає в інших трьох. Виберіть ці три й натисніть «Підтвердити» (або Enter). 20 рядів, 5 хвилин.'],
+  ana:['Аналітичне мислення','Упорядкування й класифікація інформації в логічну структуру; розуміння систем.','Розмістіть сім слів у схемі: найзагальніше слово — вгорі, дві категорії — посередині, по два представники під кожною категорією. Торкніться слова, потім клітинки (торкніться заповненої клітинки, щоб звільнити її). 12 схем, 6 хвилин.'],
+  nr:['Числове мислення','Пошук закономірностей і правил у числах.','Кожне завдання — ряд чисел, побудований за певним правилом. Введіть наступне число й натисніть Enter (або «Пропустити»). 18 завдань, 6 хвилин.'],
+  nf:['Легкість обчислень','Швидкість і легкість усного рахунку.','Заповніть обидва рівняння числовими фішками (кожна фішка — один раз; у пізніших завданнях є зайві фішки). Торкніться фішки, щоб поставити її в наступну порожню клітинку; торкніться клітинки, щоб повернути фішку. Перевірка відбувається автоматично, коли всі чотири клітинки заповнені. Якомога більше за 4 хвилини.'],
+  nm:['Пам’ять на числа','Запам’ятовування числової інформації.','Ви побачите вісім шестизначних чисел, кожне з підписом. Вивчайте їх 90 секунд (або натисніть «Готово» раніше). Після 30-секундної перерви введіть кожне число біля його підпису. Кожна цифра на правильному місці — один бал (максимум 48).'],
+  gr:['Графорія','Швидкість і точність канцелярської роботи — швидка зорова обробка деталей.','Пари чисел з’являються по одній. Якомога швидше визначте, чи вони абсолютно однакові. Клавіші: <span class="kbd">F</span> — однакові, <span class="kbd">J</span> — різні. 90 секунд. Бал = правильні − помилкові.'],
+  tonal:['Тональна пам’ять','Запам’ятовування послідовності нот.','Використовуйте навушники або колонки. Лунає коротка мелодія, потім вона звучить знову з <b>однією</b> зміненою нотою. Оберіть, яка нота (1, 2, 3…) змінилася. Мелодії поступово довшають. 12 завдань. Кожна звучить один раз.'],
+  pitch:['Розрізнення висоти тону','Розрізнення найменших відмінностей між тонами.','Звучать два тони. <b>Другий</b> був вищим чи нижчим? Різниця поступово зменшується. Клавіші: <span class="kbd">↑</span> — вище, <span class="kbd">↓</span> — нижче. 30 завдань.'],
+  rhythm:['Ритмічна пам’ять','Запам’ятовування ритмічних малюнків.','Звучать два ритми з клацань. Вони <b>однакові</b> чи <b>різні</b>? Клавіші: <span class="kbd">S</span> — однакові, <span class="kbd">D</span> — різні. 20 завдань, що поступово довшають.'],
+  md:['Пам’ять на візерунки','Запам’ятовування абстрактних лінійних малюнків, графіків і схем.','На кілька секунд з’являється лінійний візерунок на сітці з точок. Потім відтворіть його: торкніться однієї точки, а потім сусідньої, щоб намалювати (або стерти) лінію між ними. Натисніть «Готово», коли закінчите. 10 візерунків.'],
+  obs:['Спостережливість','Помічання й запам’ятовування дрібних зорових деталей.','На 6 секунд з’являється набір звичайних предметів, потім зникає й повертається з <b>однією зміною</b>: щось замінено, переміщено, прибрано або додано. Торкніться місця, де сталася зміна. 12 завдань.'],
+  color:['Розрізнення кольорів','Розрізнення тонких відмінностей у відтінках.','У кожному ряду на обох кінцях — нерухомий квадрат. Розташуйте круглі фішки між ними так, щоб утворився плавний перехід кольору від одного кінця до іншого. Торкніться фішки, потім місця, куди її перемістити. Використовуйте добре освітлений екран без кольорових фільтрів (нічний режим вимкнено). Коли всі чотири ряди виглядатимуть правильно, натисніть «Готово». Менший бал помилок — краще.'],
+  vd:['Візуальні композиції (художнє судження)','Ваші вподобання у візуальній композиції: простота чи складність (I) та врівноваженість чи зміщення від центру (II).','Двадцять пар невеликих абстрактних композицій. У кожній парі торкніться тієї, що подобається вам більше. Довіряйте першому враженню — правильних відповідей тут немає.'],
+  sil:['Силограми','Легкість засвоєння нових слів — корисна для іноземних мов і фахової термінології.','Ви побачите 18 українських слів, кожне в парі з вигаданим словом. Вивчайте їх (до 2½ хвилини). Після короткої перерви введіть вигадане слово для кожного українського. Майже правильні відповіді (одна літера не та) отримують половину бала.'],
+  finger:['Спритність пальців (замінник)','Швидка й точна дрібна моторика. У JOCRF використовують дошку з кілочками; ця екранна версія лише наближено відтворює її через швидкі точні натискання.','Якомога швидше торкайтеся (або клацайте) підсвіченого отвору; щоразу засвічується новий. 30 секунд. Під час повторних спроб користуйтеся тим самим пристроєм введення.'],
+  tweezer:['Спритність із пінцетом (замінник)','Точна робота з дрібними інструментами. У JOCRF використовують справжній пінцет і шпильки; ця версія з перетягуванням — грубе наближення.','Перетягніть крихітну шпильку з лотка ліворуч у підсвічений отвір. Зараховується, лише якщо відпустити її точно на отворі. 60 секунд.'],
+  grip:['Сила хвату','Сила кисті, яку JOCRF пов’язує з тим, наскільки людині потрібна фізична активність у роботі. Потрібен кистьовий динамометр.','Якщо у вас є кистьовий динамометр (або «розумний» еспандер), стисніть його якомога сильніше кожною рукою й введіть показники в кг. Інакше пропустіть — екран не може цього виміряти.'],
+  wa:['Словесні асоціації (стиль роботи)','Чи збігаються ваші асоціації з асоціаціями більшості (Об’єктивний — командний універсал), чи вони власні (Суб’єктивний — індивідуальний фахівець).','З’являється слово. Наберіть <b>перше</b> слово, що спадає на думку, і натисніть Enter. Не замислюйтеся — важлива швидкість. 30 слів.'],
+  vocab:['Словниковий запас (українська)','Поточне знання слів — набуте, а не вроджене; його можна розширити власними зусиллями.','Оберіть слово, найближче за значенням до виділеного. Завдання поступово ускладнюються. Якщо не знаєте — вгадуйте. 30 завдань, ліміт 12 хвилин.']},
+ lab:{block:r=>`${r.raw} / 16 (чистий бал)`,pf:frac,ws:r=>`${r.raw} слів/хв`,idea:r=>`${r.raw} слів`+(r.ratio!=null?` · ${Math.round(r.ratio*100)}% від вашої швидкості набору`:''),
+  fore:r=>`${r.raw} варіантів`,ind:frac,ana:frac,nr:frac,nf:r=>`${r.raw} розв’язано (${r.wrong} помилок)`,nm:r=>`${r.raw} / 48 цифр`,gr:r=>`${r.raw} чистий бал (${r.correct} правильно, ${r.wrong} помилок)`,
+  tonal:frac,pitch:r=>`${r.raw} / 30 (${r.hard}/12 при ≤10 центах)`,rhythm:frac,md:r=>`${r.raw} / ${r.max} ліній (${r.perfect} бездоганних)`,obs:frac,color:r=>`Бал помилок ${r.raw} (0 = ідеально)`,
+  vd:r=>`I: складні ${r.vd1}/10 · II: зміщені ${r.vd2}/10`,sil:frac,finger:r=>`${r.raw} влучань, ${r.miss} промахів`,tweezer:r=>`${r.raw} встановлено (${r.drops-r.raw} невдалих)`,
+  grip:r=>r.skipped?'Пропущено':`Л ${r.l} кг · П ${r.r} кг`,wa:r=>`${r.raw} / 30 поширених відповідей → ${t('styles')[r.style]}`,vocab:frac},
+ rep:{title:'Профіль здібностей',print:'Друк / зберегти PDF',note:'Сирі бали з приблизними рівнями — не процентилі населення.',th:['Тест','Бал','Рівень'],notTaken:'не пройдено',sv:'Структурна візуалізація',
+  composite:n=>`складений з ${n} тест${n>1?'ів':'у'}`,coreH:'Основний патерн',
+  core:{ts:'<b>Технічний фахівець.</b> Сильне тривимірне мислення в поєднанні з індивідуальним стилем: робота, де ви самі глибоко занурюєтеся в практичні чи технічні задачі — інженерне проєктування, наукові дослідження, програмування, хірургія, архітектура.',
+   tg:'<b>Технічний універсал.</b> Сильне тривимірне мислення в поєднанні з командним стилем: технічна робота через людей і разом із ними — інженерний менеджмент, прикладна наука, управління будівництвом чи продуктом, сімейна медицина, технічне викладання.',
+   ns:'<b>Нетехнічний фахівець.</b> Ідеї та абстракції замість фізичних конструкцій, з індивідуальним стилем: глибина в певній галузі знань — письменство, дослідження, право, редагування, аналітика, індивідуальне консультування.',
+   g:'<b>Універсал.</b> Люди, ідеї та системи замість фізичних конструкцій, з командним стилем: широкі ролі, де ви координуєте інших — менеджмент, бізнес, продажі, викладання, маркетинг, HR, політика.',
+   mix:'<b>Змішаний патерн.</b> Ваш просторовий бал або бал стилю роботи — посередині, тож вам може пасувати будь-який варіант. Подумайте, яка робота давалася вам найприродніше, і спирайтеся на найсильніші здібності нижче.',
+   need:'Пройдіть обидва просторові тести й тест словесних асоціацій, щоб побачити свій основний патерн (структурна візуалізація × стиль роботи).'},
+  ideaHigh:'<p>З високим балом <b>Ідеафорії</b> вам, імовірно, підійде робота, де ідеї спрямовані назовні — пояснювати, переконувати, навчати чи творити; одноманітні завдання можуть швидко втомлювати.</p>',
+  strongH:'Найсильніші здібності та де їх зазвичай застосовують',noHigh:'Поки що немає високих рівнів.',
+  vd:(a,b)=>`<p><b>Візуальні композиції:</b> ви обрали складнішу композицію ${a}/10 разів і зміщену від центру ${b}/10 разів. JOCRF порівнює ці вибори з уподобаннями професійних художників; цей ключ не оприлюднено, тому тут вони показані просто як ваш смак.</p>`,
+  howH:'Як це читати',how:'<p>Підхід JOCRF — шукати роботу, яка <b>використовує ваші сильні здібності</b> й не спирається на слабкі, а потім поєднувати це з вашими інтересами, цінностями та обставинами. Низький бал — не провал: наприклад, низьке «Передбачення» часто означає, що вам до вподоби конкретні, близькі цілі. Словниковий запас — єдиний показник тут, який можна свідомо підвищити: зосередьтеся на словах, які ви знаєте наполовину.</p>',
+  hints:{sv:'інженерія, архітектура, хірургія, механіка, програмування, фізичні науки',idea:'викладання, письменство, маркетинг, продажі, консультування, право',
+   fore:'довгострокові цілі: дослідження, підприємництво, стратегія, державна політика, академічний шлях',ind:'діагностика й пошук несправностей: медицина, право, журналістика, ІТ-підтримка, дослідження',
+   ana:'упорядкування систем: редагування, програмування, логістика, операційна діяльність, системний аналіз',nr:'фінанси, економіка, аналіз даних, актуарна справа, інженерія',
+   nf:'бухгалтерія, кошторисна справа, облік, трейдинг, роздрібна торгівля',nm:'фінанси, авіація, диспетчерська служба, продажі, асистування керівникам, статистика',
+   gr:'робота з великими обсягами інформації: адміністрування, редагування, документообіг, комплаєнс, введення даних',tonal:'мелодійні інструменти, спів, робота зі звуком, вивчення мов на слух',
+   pitch:'інструменти з керованою висотою (струнні, духові, голос), звукорежисура, настроювання',rhythm:'ударні, фортепіано, танці, ритмічні види спорту',
+   md:'графічний дизайн, креслення, картографія, історія мистецтва, читання графіків і схем',obs:'контроль якості, інспектування, правоохоронна діяльність, польові дослідження, фотографія',
+   color:'дизайн інтер’єру, фотографія, підбір кольорів, поліграфія, реставрація',sil:'іноземні мови, медична, юридична й наукова термінологія',
+   finger:'складання, клавішні інструменти, ремесла, кулінарія, лабораторна робота',tweezer:'хірургія, стоматологія, ювелірна справа, ремонт електроніки, лабораторна робота'}},
+ data:{
+  ws:'Чуєш їх, доцю, га? Кумедна ж ти, прощайся без ґольфів!',
+  topics:['Якби людям більше не потрібно було спати, як змінилося б повсякденне життя?','Опишіть усе, що зробило б міську площу ідеальною.','Що могла б зробити родина з порожнім складом протягом року?','Уявіть, що завтра в кожному домі з’явився робот-помічник. Що буде далі?'],
+  nmLabels:['Шафка','Рахунок','Кімната','Рейс','Акаунт','Замовлення','Бейдж','Квиток','Вихід','Дозвіл'],
+  trees:[['Транспорт',['Наземний','Автомобіль','Велосипед'],['Водний','Каное','Пором']],['Їжа',['Фрукт','Яблуко','Манго'],['Овоч','Морква','Шпинат']],
+   ['Фігура',['Многокутник','Трикутник','Шестикутник'],['Криволінійна','Коло','Еліпс']],['Тварина',['Ссавець','Дельфін','Кажан'],['Птах','Пінгвін','Страус']],
+   ['Музичний інструмент',['Струнні','Скрипка','Віолончель'],['Ударні','Барабан','Ксилофон']],['Література',['Художня','Роман','Байка'],['Документальна','Мемуари','Енциклопедія']],
+   ['Наука',['Науки про життя','Ботаніка','Зоологія'],['Фізичні науки','Хімія','Фізика']],['Погода',['Опади','Град','Мряка'],['Вітер','Буревій','Бриз']],
+   ['Спорт',['Командний','Футбол','Волейбол'],['Індивідуальний','Стрільба з лука','Фехтування']],['Енергія',['Відновлювана','Сонячна','Геотермальна'],['Викопне паливо','Вугілля','Нафта']],
+   ['Інструмент',['Ріжучий','Пилка','Ножиці'],['Вимірювальний','Лінійка','Штангенциркуль']],['Будівля',['Житло','Котедж','Квартира'],['Культова споруда','Каплиця','Мечеть']]],
+  silWords:['річка','свічка','олівець','сад','вікно','кінь','кошик','дзеркало','драбина','ґудзик','ліс','чайник','острів','куртка','скрипка','килим','міст','перець','ракета','лимон','якір','тунель','перо','замок'],
+  silC:'бвгдзклмнпрстх',silV:'аеиоу',
+  wa:[['гарячий','холодний'],['верх','низ низько'],['сіль','перець цукор'],['король','королева'],['хліб','масло сіль'],['голка','нитка'],['лікар','медсестра лікарня хворий'],['стіл','стілець'],['чорний','білий'],['хлопчик','дівчинка'],
+   ['собака','кіт гавкати'],['ніч','день темрява темно'],['вогонь','вода гарячий дим полум’я'],['яблуко','дерево червоне фрукт груша'],['сонце','місяць тепло світло'],['річка','вода море озеро'],['птах','летіти гніздо крило небо'],
+   ['школа','вчитель учень урок'],['океан','море вода'],['солодкий','кислий цукор гіркий'],['ліжко','сон спати подушка'],['лампа','світло'],['гора','вершина сніг висока'],
+   ['музика','пісня звук'],['вікно','двері скло'],['павук','павутина'],['грім','блискавка гроза'],['сир','миша молоко'],['нога','рука взуття'],['мама','тато']],
+  voc:[['стародавній','давній','зламаний','святий','далекий','прихований'],['швидкий','прудкий','тихий','яскравий','важкий','сердитий'],['крихкий','ламкий','барвистий','порожній','липкий','гучний'],
+   ['відвертий','щирий','солодкий','обережний','сором’язливий','яскравий'],['зухвалий','нахабний','сумний','повільний','сухий','тихий'],['рясний','густий','рідкий','важкий','відсутній','далекий'],
+   ['ретельний','старанний','щедрий','нервовий','раптовий','незграбний'],['зловісний','загрозливий','величезний','нешкідливий','радісний','священний'],['двозначний','неясний','амбітний','ворожий','упевнений','звичайний'],
+   ['наполегливий','завзятий','крихкий','щедрий','боязкий','недбалий'],['доброзичливий','прихильний','заможний','нерозумний','жорстокий','лінивий'],['млявий','кволий','смертельний','балакучий','нервовий','законний'],
+   ['прагматичний','практичний','драматичний','теоретичний','владний','товариський'],['побіжний','поверховий','досконалий','пунктуальний','суттєвий','запашний'],['упертий','затятий','слухняний','прострочений','очевидний','тінистий'],
+   ['лаконічний','стислий','лінивий','слізний','молочний','лагідний'],['ефемерний','швидкоплинний','уявний','небесний','вигадливий','давній'],['тужливий','сумовитий','слизький','велетенський','масний','світлий'],
+   ['флегматичний','незворушний','хворобливий','балакучий','пихатий','липкий'],['улесливий','підлабузницький','темний','упертий','очевидний','образливий'],['непокірний','норовливий','повторюваний','розважливий','відлюдний','жалюгідний'],
+   ['зажерливий','жадібний','запальний','засмучений','заспаний','задумливий'],['гонористий','пихатий','швидкий','щедрий','побожний','хворий'],['облудний','оманливий','обережний','круглий','щедрий','обідній'],
+   ['апокрифічний','недостовірний','пророчий','катастрофічний','вибачливий','священний'],['кебетливий','тямущий','лякливий','кривий','гучний','ледачий'],['звитяжний','переможний','звивистий','сором’язливий','вічний','грішний'],
+   ['марудний','нудний','мрійливий','марний','чудовий','ясний'],['блюзнірський','богохульний','блакитний','блискучий','бундючний','лагідний'],['пересторога','застереження','перешкода','переправа','перерва','перевага']]}}
+};
+let LNG=(()=>{try{const s=localStorage.getItem('aptLang');if(s)return s;}catch(e){}return(navigator.language||'').toLowerCase().startsWith('uk')?'uk':'en';})();
+const L=()=>LANG[LNG];
+const t=(k,...a)=>{const v=L().ui[k];return typeof v==='function'?v(...a):v;};
+const TN=id=>L().tests[id][0];
+function toggleTheme(){const n=document.documentElement.dataset.theme==='light'?'dark':'light';document.documentElement.dataset.theme=n;try{localStorage.setItem('aptTheme',n)}catch(e){}}
+function setLang(l){LNG=l;try{localStorage.setItem('aptLang',l)}catch(e){}applyLang();home();}
+function applyLang(){document.documentElement.lang=LNG;document.title=t('title');$('#ttl').textContent=t('title');$('#exitBtn').textContent=t('exit');
+ $$('#langSw button').forEach(b=>b.classList.toggle('on',b.dataset.l===LNG));}
+
+/* ================= utilities ================= */
+const $=(s,el=document)=>el.querySelector(s);
+const $$=(s,el=document)=>[...el.querySelectorAll(s)];
+const rnd=n=>Math.floor(Math.random()*n);
+const pick=a=>a[rnd(a.length)];
+const shuffle=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=rnd(i+1);[a[i],a[j]]=[a[j],a[i]];}return a;};
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const fmt=s=>`${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`;
+const bandHL=(v,lo,hi)=>v<lo?'Low':v>=hi?'High':'Average';
+const words=s=>(s.trim().match(/\S+/g)||[]).length;
+const stage=$('#stage');
+
+let KEYH=null;document.addEventListener('keydown',e=>{if(KEYH)KEYH(e);});
+let TIMER=null,TIMEOUTS=[];
+function later(fn,ms){const id=setTimeout(fn,ms);TIMEOUTS.push(id);return id;}
+function startTimer(sec,onEnd){stopTimer();const end=Date.now()+sec*1000;const el=$('#timer');
+ const tick=()=>{const r=Math.max(0,Math.ceil((end-Date.now())/1000));el.textContent=fmt(r);if(r<=0){stopTimer();onEnd();}};
+ tick();TIMER=setInterval(tick,250);}
+function stopTimer(){if(TIMER)clearInterval(TIMER);TIMER=null;$('#timer').textContent='';}
+function cleanup(){stopTimer();KEYH=null;TIMEOUTS.forEach(clearTimeout);TIMEOUTS=[];$('#exitBtn').style.display='none';$('#langSw').style.display='';}
+
+const store={get(){try{return JSON.parse(localStorage.getItem('aptBattery21')||'{}')}catch(e){return{}}},
+ set(v){try{localStorage.setItem('aptBattery21',JSON.stringify(v))}catch(e){}}};
+let RESULTS=store.get();
+function saveResult(id,res){RESULTS[id]={...res,lang:LNG,date:new Date().toISOString()};store.set(RESULTS);}
+const LANG_DEP=['idea','fore','sil','wa','vocab','ws','ana'];
+function labelOf(id,r){let s;try{s=L().lab[id](r);}catch(e){s=r.label||'';}if(LANG_DEP.includes(id)&&r.lang&&r.lang!==LNG)s+=t('langTag',r.lang);return s;}
+const bandChip=b=>b?` <span class="chip ${b}">${t('band')[b]}</span>`:'';
+
+function seq(n,timeSec,renderItem,finish){
+ let i=0,correct=0,wrong=0,ended=false;
+ const end=()=>{if(ended)return;ended=true;stopTimer();KEYH=null;finish({correct,wrong,attempted:i});};
+ if(timeSec)startTimer(timeSec,end);
+ const next=()=>{if(ended)return;if(i>=n)return end();KEYH=null;let answered=false;renderItem(i,ok=>{if(ended||answered)return;answered=true;if(ok===true)correct++;else if(ok===false)wrong++;i++;next();});};
+ next();return end;
+}
+
+/* ================= audio ================= */
+let AC=null;
+function ac(){if(!AC)AC=new(window.AudioContext||window.webkitAudioContext)();if(AC.state==='suspended')AC.resume();return AC;}
+function tone(f,tm,dur,type='sine',vol=.22){const c=ac();const o=c.createOscillator(),g=c.createGain();o.type=type;o.frequency.value=f;
+ g.gain.setValueAtTime(0,tm);g.gain.linearRampToValueAtTime(vol,tm+.02);g.gain.setValueAtTime(vol,tm+dur-.04);g.gain.linearRampToValueAtTime(0,tm+dur);
+ o.connect(g);g.connect(c.destination);o.start(tm);o.stop(tm+dur+.05);}
+function click(tm){const c=ac();const o=c.createOscillator(),g=c.createGain();o.type='triangle';o.frequency.value=900;
+ g.gain.setValueAtTime(.35,tm);g.gain.exponentialRampToValueAtTime(.001,tm+.08);o.connect(g);g.connect(c.destination);o.start(tm);o.stop(tm+.1);}
+const midiF=m=>440*2**((m-69)/12);
+
+function distractor(el,sec,next){
+ const qs=Array.from({length:12},()=>({a:rnd(40)+10,b:rnd(40)+10}));let k=0;
+ const draw=()=>{const q=qs[k%qs.length];el.innerHTML=`<div class="card center"><div class="muted">${t('distractor')}</div><div class="big" style="margin:14px">${q.a} + ${q.b} = ?</div><input id="dx" type="number" style="max-width:160px"></div>`;
+  const inp=$('#dx');inp.focus();inp.onkeydown=e=>{if(e.key==='Enter'){k++;draw();}};};
+ draw();startTimer(sec,next);
+}
+
+/* ================= Paper Folding ================= */
+const hkey=H=>H.map(h=>h.join(',')).sort().join(';');
+const huniq=H=>{const m=new Map();H.forEach(h=>m.set(h.join(','),h));return[...m.values()];};
+function unfoldH(folds,holes,skip=-1){let H=holes.map(h=>[...h]);for(let k=folds.length-1;k>=0;k--){if(k===skip)continue;const f=folds[k];const v=f.t==='L'||f.t==='R';
+ H=huniq(H.concat(H.map(([x,y])=>v?[2*f.m-1-x,y]:[x,2*f.m-1-y])));}return H;}
+const inb=H=>H.every(([x,y])=>x>=0&&x<4&&y>=0&&y<4);
+function pfPanel(reg,f,holes){const X=v=>8+v*20;let s=`<svg viewBox="0 0 96 96" width="92" height="92"><rect x="8" y="8" width="80" height="80" fill="none" stroke="#ccc" stroke-dasharray="3 3"/>`;
+ s+=`<rect x="${X(reg.x0)}" y="${X(reg.y0)}" width="${(reg.x1-reg.x0)*20}" height="${(reg.y1-reg.y0)*20}" fill="#fff" stroke="#333" stroke-width="1.5"/>`;
+ if(f){let fl,p1,p2;const cy=(reg.y0+reg.y1)/2,cx=(reg.x0+reg.x1)/2;
+  if(f.t==='L'){fl={x0:reg.x0,x1:f.m,y0:reg.y0,y1:reg.y1};p1=[(reg.x0+f.m)/2,cy];p2=[(f.m+reg.x1)/2,cy];}
+  if(f.t==='R'){fl={x0:f.m,x1:reg.x1,y0:reg.y0,y1:reg.y1};p1=[(f.m+reg.x1)/2,cy];p2=[(reg.x0+f.m)/2,cy];}
+  if(f.t==='T'){fl={x0:reg.x0,x1:reg.x1,y0:reg.y0,y1:f.m};p1=[cx,(reg.y0+f.m)/2];p2=[cx,(f.m+reg.y1)/2];}
+  if(f.t==='B'){fl={x0:reg.x0,x1:reg.x1,y0:f.m,y1:reg.y1};p1=[cx,(f.m+reg.y1)/2];p2=[cx,(reg.y0+f.m)/2];}
+  s+=`<rect x="${X(fl.x0)}" y="${X(fl.y0)}" width="${(fl.x1-fl.x0)*20}" height="${(fl.y1-fl.y0)*20}" fill="#cfe0f3" stroke="#333" stroke-width="1.5"/>`;
+  const v=f.t==='L'||f.t==='R';s+=v?`<line x1="${X(f.m)}" y1="${X(reg.y0)}" x2="${X(f.m)}" y2="${X(reg.y1)}" stroke="#333" stroke-dasharray="4 3"/>`:`<line x1="${X(reg.x0)}" y1="${X(f.m)}" x2="${X(reg.x1)}" y2="${X(f.m)}" stroke="#333" stroke-dasharray="4 3"/>`;
+  const a=[X(p1[0]),X(p1[1])],b=[X(p2[0]),X(p2[1])],c=v?[(a[0]+b[0])/2,(a[1]+b[1])/2-16]:[(a[0]+b[0])/2-16,(a[1]+b[1])/2];
+  s+=`<path d="M${a} Q${c} ${b}" fill="none" stroke="#b8502f" stroke-width="2" marker-end="url(#arr)"/>`;}
+ (holes||[]).forEach(([x,y])=>s+=`<circle cx="${X(x)+10}" cy="${X(y)+10}" r="5" fill="#222"/>`);
+ return s+`</svg>`;}
+function pfOpt(H){let s=`<svg viewBox="0 0 96 96" width="88" height="88"><rect x="8" y="8" width="80" height="80" fill="#fff" stroke="#333" stroke-width="1.5"/>`;
+ for(let k=1;k<4;k++)s+=`<line x1="${8+k*20}" y1="8" x2="${8+k*20}" y2="88" stroke="#eee"/><line x1="8" y1="${8+k*20}" x2="88" y2="${8+k*20}" stroke="#eee"/>`;
+ H.forEach(([x,y])=>s+=`<circle cx="${18+x*20}" cy="${18+y*20}" r="5" fill="#222"/>`);return s+`</svg>`;}
+function pfMake(nf,punches){
+ let r={x0:0,x1:4,y0:0,y1:4};const folds=[],regs=[{...r}];
+ for(let f=0;f<nf;f++){const w=r.x1-r.x0,h=r.y1-r.y0,o=[];if(w>=2)o.push('L','R');if(h>=2)o.push('T','B');const tp=pick(o);
+  if(tp==='L'||tp==='R'){const m=r.x0+w/2;folds.push({t:tp,m});r=tp==='L'?{...r,x0:m}:{...r,x1:m};}
+  else{const m=r.y0+h/2;folds.push({t:tp,m});r=tp==='T'?{...r,y0:m}:{...r,y1:m};}regs.push({...r});}
+ const area=(r.x1-r.x0)*(r.y1-r.y0);punches=Math.min(punches,area);const h0=[];
+ while(h0.length<punches){const c=[r.x0+rnd(r.x1-r.x0),r.y0+rnd(r.y1-r.y0)];if(!h0.some(h=>h[0]===c[0]&&h[1]===c[1]))h0.push(c);}
+ const correct=unfoldH(folds,h0);const ck=hkey(correct);
+ let cands=[unfoldH(folds,h0,0),unfoldH(folds,h0,nf-1),correct.map(([x,y])=>[3-x,y]),correct.map(([x,y])=>[x,3-y])];
+ for(const [dx,dy] of shuffle([[1,0],[-1,0],[0,1],[0,-1]]))cands.push(correct.map(([x,y])=>[x+dx,y+dy]));
+ cands=shuffle(cands.slice(0,4)).concat(cands.slice(4));
+ const out=[],seen=new Set([ck]);
+ for(const c of cands){const k=hkey(c);if(inb(c)&&!seen.has(k)){seen.add(k);out.push(c);}if(out.length===3)break;}
+ let guard=0;while(out.length<3&&guard++<500){const n=correct.length,H=[];while(H.length<n){const c=[rnd(4),rnd(4)];if(!H.some(h=>h[0]===c[0]&&h[1]===c[1]))H.push(c);}const k=hkey(H);if(!seen.has(k)){seen.add(k);out.push(H);}}
+ if(out.length<3)return pfMake(nf,1);
+ const all=shuffle([correct,...out]);const ans=all.findIndex(h=>hkey(h)===ck);
+ const steps=folds.map((f,k)=>pfPanel(regs[k],f)).join('<span class="muted">→</span>')+'<span class="muted">→</span>'+pfPanel(regs[nf],null,h0);
+ return{steps,opts:all.map(pfOpt),ans};}
+
+/* ================= Block Rotation ================= */
+const ROTS=(()=>{const mul=(A,B)=>A.map(r=>[0,1,2].map(j=>r[0]*B[0][j]+r[1]*B[1][j]+r[2]*B[2][j]));
+ const G=[[[1,0,0],[0,0,-1],[0,1,0]],[[0,0,1],[0,1,0],[-1,0,0]],[[0,-1,0],[1,0,0],[0,0,1]]];
+ const out=[],seen=new Set(),st=[[[1,0,0],[0,1,0],[0,0,1]]];
+ while(st.length){const m=st.pop(),k=m.flat().join();if(seen.has(k))continue;seen.add(k);out.push(m);G.forEach(R=>st.push(mul(R,m)));}return out;})();
+const rot=(m,p)=>[0,1,2].map(i=>m[i][0]*p[0]+m[i][1]*p[1]+m[i][2]*p[2]);
+const cnorm=cs=>{const mn=[0,1,2].map(i=>Math.min(...cs.map(c=>c[i])));return cs.map(c=>c.map((v,i)=>v-mn[i]).join(',')).sort().join(';');};
+function makeShape(){for(;;){const cubes=[[0,0,0]];let cur=[0,0,0],pa=-1,ok=true;
+ for(const len of [3,2,3,2]){let ax;do{ax=rnd(3)}while(ax===pa);pa=ax;const sg=Math.random()<.5?-1:1;
+  for(let k=0;k<len;k++){cur=[...cur];cur[ax]+=sg;if(cubes.some(c=>c.join()===cur.join())){ok=false;break;}cubes.push(cur);}if(!ok)break;}
+ if(!ok)continue;const mir=cubes.map(([x,y,z])=>[-x,y,z]);const rs=new Set(ROTS.map(R=>cnorm(cubes.map(p=>rot(R,p)))));
+ if(rs.has(cnorm(mir)))continue;return cubes;}}
+function cubeSvg(cs){const s=16,P=([x,y,z])=>[(x-y)*.866*s,(x+y)*.5*s-z*s];const set=new Set(cs.map(c=>c.join()));const has=(x,y,z)=>set.has([x,y,z].join());
+ const polys=[];[...cs].sort((a,b)=>(a[0]+a[1]+a[2])-(b[0]+b[1]+b[2])).forEach(([x,y,z])=>{
+  if(!has(x,y,z+1))polys.push([[[x,y,z+1],[x+1,y,z+1],[x+1,y+1,z+1],[x,y+1,z+1]],'#eef2f7']);
+  if(!has(x+1,y,z))polys.push([[[x+1,y,z],[x+1,y+1,z],[x+1,y+1,z+1],[x+1,y,z+1]],'#a7bcd3']);
+  if(!has(x,y+1,z))polys.push([[[x,y+1,z],[x+1,y+1,z],[x+1,y+1,z+1],[x,y+1,z+1]],'#6e8db0']);});
+ const pts=polys.flatMap(p=>p[0].map(P));const xs=pts.map(p=>p[0]),ys=pts.map(p=>p[1]);
+ const mnx=Math.min(...xs)-6,mny=Math.min(...ys)-6,w=Math.max(...xs)-mnx+6,h=Math.max(...ys)-mny+6,d=Math.max(w,h);
+ return `<svg viewBox="${mnx-(d-w)/2} ${mny-(d-h)/2} ${d} ${d}" width="220" height="220">`+polys.map(([q,f])=>`<polygon points="${q.map(P).map(p=>p.join(',')).join(' ')}" fill="${f}" stroke="#1e2a38" stroke-width="1.1" stroke-linejoin="round"/>`).join('')+`</svg>`;}
+
+/* ================= Inductive Reasoning ================= */
+const IA={shape:['circle','square','triangle','diamond','hexagon','star'],color:['#d0433a','#2a72c8','#2f9a52','#d99a00','#8552c9','#333'],fill:['solid','outline','half'],size:[.5,.72,.95],mark:['none','dot','bar','cross']};
+function shapeEl(sh,r){const pts=a=>`<polygon points="${a.map(p=>p.map(v=>v.toFixed(1)).join(',')).join(' ')}"/>`;
+ if(sh==='circle')return`<circle r="${r}"/>`;if(sh==='square')return`<rect x="${-r*.82}" y="${-r*.82}" width="${r*1.64}" height="${r*1.64}"/>`;
+ if(sh==='triangle')return pts([[0,-r],[r*.95,r*.6],[-r*.95,r*.6]]);if(sh==='diamond')return pts([[0,-r],[r*.75,0],[0,r],[-r*.75,0]]);
+ if(sh==='hexagon')return pts([0,1,2,3,4,5].map(k=>[r*Math.cos(k*Math.PI/3),r*Math.sin(k*Math.PI/3)]));
+ return pts([...Array(10)].map((_,k)=>{const rr=k%2?r*.45:r,a=-Math.PI/2+k*Math.PI/5;return[rr*Math.cos(a),rr*Math.sin(a)];}));}
+function indSvg(o){const r=34*o.size,c=o.color,b=shapeEl(o.shape,r);let s=`<svg viewBox="-40 -40 80 80" width="76" height="76">`;
+ if(o.fill==='solid')s+=`<g fill="${c}" stroke="${c}" stroke-width="2">${b}</g>`;
+ else if(o.fill==='outline')s+=`<g fill="none" stroke="${c}" stroke-width="3">${b}</g>`;
+ else s+=`<g fill="${c}" clip-path="url(#halfL)">${b}</g><g fill="none" stroke="${c}" stroke-width="3">${b}</g>`;
+ const m=Math.max(r*.22,4);const mk=`fill="#fff" stroke="${c}" stroke-width="1.6"`;
+ if(o.mark==='dot')s+=`<circle r="${m}" ${mk}/>`;if(o.mark==='bar')s+=`<rect x="${-m*2}" y="-3" width="${m*4}" height="6" ${mk}/>`;
+ if(o.mark==='cross')s+=`<path d="M${-m*1.6} ${-m*1.6}L${m*1.6} ${m*1.6}M${m*1.6} ${-m*1.6}L${-m*1.6} ${m*1.6}" stroke="${c}" stroke-width="5" stroke-linecap="round"/><path d="M${-m*1.6} ${-m*1.6}L${m*1.6} ${m*1.6}M${m*1.6} ${-m*1.6}L${-m*1.6} ${m*1.6}" stroke="#fff" stroke-width="2" stroke-linecap="round"/>`;
+ return s+`</svg>`;}
+function indItem(key){for(;;){const items=Array.from({length:6},()=>({}));const tgt=shuffle([0,1,2,3,4,5]).slice(0,3);let ok=true;
+ for(const a in IA){const vals=IA[a];if(a===key){const v=pick(vals),oth=shuffle(vals.filter(x=>x!==v));let oi=0;items.forEach((it,i)=>{it[a]=tgt.includes(i)?v:oth[(oi++)%oth.length];});}
+  else{items.forEach(it=>it[a]=pick(vals));const cnt={};items.forEach(it=>cnt[it[a]]=(cnt[it[a]]||0)+1);if(Object.values(cnt).some(c=>c>=3)){ok=false;break;}}}
+ if(ok)return{items,tgt};}}
+
+/* ================= Numerical Reasoning ================= */
+const NSG=[
+ ()=>{const a=rnd(20)+1,d=rnd(8)+2;return[0,1,2,3,4,5].map(i=>a+d*i)},
+ ()=>{const a=rnd(60)+50,d=rnd(6)+3;return[0,1,2,3,4,5].map(i=>a-d*i)},
+ ()=>{const a=rnd(3)+1,r=rnd(2)+2;return[0,1,2,3,4,5].map(i=>a*r**i)},
+ ()=>{let a=rnd(10)+1,d=rnd(3)+1;const dd=rnd(2)+1,s=[a];for(let i=1;i<6;i++){a+=d;d+=dd;s.push(a)}return s},
+ ()=>{let x=rnd(10)+5;const p=rnd(6)+4,q=rnd(3)+1,s=[x];for(let i=1;i<7;i++){x+=i%2?p:-q;s.push(x)}return s},
+ ()=>{const s=[rnd(5)+1,rnd(5)+2];while(s.length<7)s.push(s[s.length-1]+s[s.length-2]);return s},
+ ()=>{let x=rnd(4)+1;const c=rnd(3)+1,s=[x];for(let i=1;i<6;i++){x=x*2+c;s.push(x)}return s},
+ ()=>{const c=rnd(6)-2,k=rnd(3)+1;return[0,1,2,3,4,5].map(i=>(k+i)**2+c)},
+ ()=>{const a=rnd(10)+1,d=rnd(4)+2,b=rnd(30)+25,e=rnd(3)+2,s=[];for(let i=0;i<4;i++){s.push(a+d*i);s.push(b-e*i)}return s.slice(0,7)},
+ ()=>{let x=rnd(4)+2;const a=rnd(2)+2,b=rnd(5)+1,s=[x];for(let i=1;i<7;i++){x=i%2?x*a:x+b;s.push(x)}return s},
+ ()=>{let x=rnd(5)+2;const s=[x];for(let i=1;i<7;i++){x=x+i*i;s.push(x)}return s},
+ ()=>{let x=rnd(80)+120;const s=[x];for(let i=1;i<7;i++){x=i%2?x-i*3:x+i*2;s.push(x)}return s}];
+const NSORDER=[0,1,0,2,1,3,4,2,5,3,6,7,4,8,9,10,11,9];
+
+/* ================= Number Facility ================= */
+const opv=(o,x,y)=>o==='+'?x+y:o==='−'?x-y:x*y;
+function nfItem(lvl){const ops=['+','−','×'];for(;;){const o1=pick(ops),o2=pick(ops),mx=lvl<1?9:lvl<2?12:16;
+ const gen=o=>{let a=rnd(mx-1)+2,b=rnd(mx-1)+2;if(o==='−'&&a<b)[a,b]=[b,a];return[a,b]};
+ const[a,b]=gen(o1),[c,d]=gen(o2);const v=[a,b,c,d];if(new Set(v).size<4)continue;
+ const R1=opv(o1,a,b),R2=opv(o2,c,d);const pool=[...v];const dec=lvl>=2?2:lvl>=1?1:0;
+ while(pool.length<4+dec){const x=rnd(mx-1)+2;if(!pool.includes(x))pool.push(x);}
+ const sols=new Set();const n=pool.length;
+ for(let i=0;i<n;i++)for(let j=0;j<n;j++)for(let k=0;k<n;k++)for(let l=0;l<n;l++){if(new Set([i,j,k,l]).size<4)continue;
+  if(opv(o1,pool[i],pool[j])===R1&&opv(o2,pool[k],pool[l])===R2){const e1=o1==='−'?[pool[i],pool[j]]:[pool[i],pool[j]].sort((x,y)=>x-y),e2=o2==='−'?[pool[k],pool[l]]:[pool[k],pool[l]].sort((x,y)=>x-y);sols.add(JSON.stringify([e1,e2]));}}
+ if(sols.size!==1)continue;return{o1,o2,R1,R2,pool:shuffle(pool)};}}
+
+/* ================= Memory for Design ================= */
+const segKey=(p,q)=>{const a=p[1]*4+p[0],b=q[1]*4+q[0];return a<b?`${a}-${b}`:`${b}-${a}`;};
+function mdDesign(k){for(;;){const segs=new Set();let p=[rnd(4),rnd(4)],g=0;const D=[[1,0],[-1,0],[0,1],[0,-1],[1,1],[1,-1],[-1,1],[-1,-1]];
+ while(segs.size<k&&g++<300){const d=pick(D),q=[p[0]+d[0],p[1]+d[1]];if(q.some(v=>v<0||v>3))continue;const key=segKey(p,q);if(segs.has(key))continue;segs.add(key);
+  if(Math.random()<.22){const e=+pick(pick([...segs]).split('-'));p=[e%4,Math.floor(e/4)];}else p=q;}
+ if(segs.size===k)return segs;}}
+function mdSvg(segs,{sel=null}={}){const X=v=>30+v*53;let s=`<svg viewBox="0 0 220 220" width="240" height="240">`;
+ segs.forEach(k=>{const[a,b]=k.split('-').map(Number);s+=`<line x1="${X(a%4)}" y1="${X(Math.floor(a/4))}" x2="${X(b%4)}" y2="${X(Math.floor(b/4))}" stroke="#1e2a38" stroke-width="5" stroke-linecap="round"/>`;});
+ for(let i=0;i<16;i++)s+=`<circle data-i="${i}" cx="${X(i%4)}" cy="${X(Math.floor(i/4))}" r="${sel===i?11:8}" fill="${sel===i?'#b8502f':'#9aa5b1'}" style="cursor:pointer"/><circle data-i="${i}" cx="${X(i%4)}" cy="${X(Math.floor(i/4))}" r="22" fill="transparent" style="cursor:pointer"/>`;
+ return s+`</svg>`;}
+
+/* ================= Observation / Color / Visual designs ================= */
+const OBJ=['☕','🔑','✂️','📎','⏰','📱','🎈','🍎','🔦','📚','🖊️','🎒','⚽','🕯️','🍌','🔨','📷','🎧','🥄','🔔','🌂','👓','🎁','💡','🔒','⌚','🍐','🥕','🍋','🎲'];
+const OKL=(window.CSS&&CSS.supports&&CSS.supports('color','oklch(0.7 0.1 10)'));
+const hueCol=h=>OKL?`oklch(0.72 0.11 ${h})`:`hsl(${h},42%,60%)`;
+const PALS=[['#1f3b57','#c8553d','#f2d0a4','#588b8b'],['#2d2a32','#ddd92a','#eae151','#5c946e'],['#3d405b','#e07a5f','#81b29a','#f2cc8f'],['#264653','#2a9d8f','#e9c46a','#e76f51']];
+function vShape(tp,x,y,s,c,r=0){if(tp===0)return`<rect x="${x-s/2}" y="${y-s/2}" width="${s}" height="${s}" fill="${c}" transform="rotate(${r} ${x} ${y})"/>`;
+ if(tp===1)return`<circle cx="${x}" cy="${y}" r="${s/2}" fill="${c}"/>`;if(tp===2)return`<polygon points="${x},${y-s/2} ${x+s/2},${y+s/2} ${x-s/2},${y+s/2}" fill="${c}"/>`;
+ return`<line x1="${x-s/2}" y1="${y}" x2="${x+s/2}" y2="${y}" stroke="${c}" stroke-width="4" transform="rotate(${r} ${x} ${y})"/>`;}
+function vComp(kind,pal){let s=`<svg viewBox="0 0 200 140" width="260" height="182"><rect width="200" height="140" fill="#fbf8f2"/>`;const P=()=>pick(pal);
+ if(kind==='simple'){for(let i=0;i<3;i++)s+=vShape(rnd(3),30+rnd(140),25+rnd(90),34+rnd(30),P(),rnd(4)*15);}
+ else if(kind==='complex'){for(let i=0;i<16;i++)s+=vShape(rnd(4),10+rnd(180),10+rnd(120),8+rnd(26),P(),rnd(12)*15);}
+ else if(kind==='sym'){for(let i=0;i<4;i++){const tp=rnd(4),x=15+rnd(75),y=15+rnd(110),z=14+rnd(26),c=P(),r=rnd(4)*15;s+=vShape(tp,x,y,z,c,r)+vShape(tp,200-x,y,z,c,-r);}s+=vShape(1,100,70,16+rnd(14),P());}
+ else{const cx=pick([40,160]),cy=pick([35,105]);for(let i=0;i<8;i++)s+=vShape(rnd(4),clamp(cx+(Math.random()-.5)*90,10,190),clamp(cy+(Math.random()-.5)*70,10,130),8+rnd(i===0?50:22),P(),rnd(12)*15);}
+ return s+`</svg>`;}
+
+/* ================= Silograms helpers ================= */
+function nonsense(){const C=L().data.silC,V=L().data.silV;const syl=()=>C[rnd(C.length)]+V[rnd(V.length)]+(Math.random()<.6?C[rnd(C.length)]:'');return(syl()+syl()).toUpperCase();}
+function lev(a,b){const d=Array.from({length:a.length+1},(_,i)=>[i,...Array(b.length).fill(0)]);for(let j=1;j<=b.length;j++)d[0][j]=j;
+ for(let i=1;i<=a.length;i++)for(let j=1;j<=b.length;j++)d[i][j]=Math.min(d[i-1][j]+1,d[i][j-1]+1,d[i-1][j-1]+(a[i-1]===b[j-1]?0:1));return d[a.length][b.length];}
+const waNorm=s=>s.toLowerCase().replace(/[^a-zа-яіїєґ]/g,'');
+function waMatch(resp,list){const a=waNorm(resp);return list.split(' ').map(waNorm).some(b=>{if(a===b)return true;const n=Math.min(a.length,b.length);return n>=4&&a.slice(0,Math.min(5,n))===b.slice(0,Math.min(5,n));});}
+
+/* ================= TEST DEFINITIONS ================= */
+const TESTS=[
+{id:'block',group:'Spatial',apt:true,min:4,
+ run(el,done){const items=Array.from({length:16},()=>{const c=makeShape(),same=Math.random()<.5,b=same?c:c.map(([x,y,z])=>[-x,y,z]);
+   const okv=cs=>new Set(cs.map(([x,y,z])=>`${x-y},${x+y-2*z}`)).size===cs.length;
+   const pr=(cs,not)=>{let R,k=0;do{R=pick(ROTS);k++}while((R===not||!okv(cs.map(p=>rot(R,p))))&&k<200);return R;};const RA=pr(c,null),RB=pr(b,RA);
+   return{a:cubeSvg(c.map(p=>rot(RA,p))),b:cubeSvg(b.map(p=>rot(RB,p))),same}});
+  seq(16,240,(i,ans)=>{const it=items[i];el.innerHTML=`<div class="card center"><div class="muted">${t('item',i+1,16)}</div><div class="row" style="justify-content:center;gap:30px">${it.a}${it.b}</div><div class="row" style="justify-content:center"><button id="bs">${t('sameS')}</button><button id="bd">${t('mirrorD')}</button></div></div>`;
+   const a=v=>ans(v===it.same);$('#bs').onclick=()=>a(true);$('#bd').onclick=()=>a(false);KEYH=e=>{if(e.code==='KeyS')a(true);if(e.code==='KeyD')a(false);};},
+   r=>{const v=Math.max(0,r.correct-r.wrong);done({raw:v,max:16,band:bandHL(v,5,11),pct:v/16*100});});}},
+{id:'pf',group:'Spatial',apt:true,min:4,
+ run(el,done){const LV=[1,1,1,2,2,2,2,3,3,2,3,2].map((n,i)=>pfMake(n,i>=9&&n<=2?2:1));
+  seq(12,240,(i,ans)=>{const it=LV[i];el.innerHTML=`<div class="card"><div class="muted center">${t('item',i+1,12)}</div><div class="steps">${it.steps}</div><p class="center">${t('pfQ')}</p><div class="opts">${it.opts.map((o,k)=>`<button class="opt" data-k="${k}">${o}<b>${'ABCD'[k]}</b></button>`).join('')}</div></div>`;
+   $$('.opt',el).forEach(b=>b.onclick=()=>ans(+b.dataset.k===it.ans));KEYH=e=>{const k=['KeyA','KeyB','KeyC','KeyD'].indexOf(e.code);if(k>=0)ans(k===it.ans);};},
+   r=>done({raw:r.correct,max:12,band:bandHL(r.correct,5,9),pct:r.correct/12*100}));}},
+{id:'ws',group:'Control',apt:false,min:1,
+ run(el,done){el.innerHTML=`<div class="card"><p class="center" style="font-size:20px">${L().data.ws}</p><textarea id="ta" style="min-height:160px"></textarea><div class="center" style="margin-top:12px"><button class="primary" id="fin">${t('done')}</button></div></div>`;const ta=$('#ta');ta.focus();
+  const fin=()=>{stopTimer();const w=words(ta.value);done({raw:w,max:null,band:null,pct:null});};$('#fin').onclick=fin;startTimer(60,fin);}},
+{id:'idea',group:'Divergent thinking',apt:true,min:5,
+ run(el,done){const T=pick(L().data.topics);
+  el.innerHTML=`<div class="card"><h3>${t('topic')}</h3><p style="font-size:18px">${T}</p><textarea id="ta" placeholder="${t('ideaHolder')}"></textarea><div class="center" style="margin-top:12px"><button class="primary" id="fin">${t('done')}</button></div></div>`;const ta=$('#ta');ta.focus();
+  const fin=()=>{stopTimer();const w=words(ta.value),wpm=w/5,ws=RESULTS.ws&&RESULTS.ws.raw;let band,ratio=null;
+   if(ws){ratio=wpm/ws;band=ratio<.35?'Low':ratio>=.6?'High':'Average';}else band=bandHL(w,120,220);
+   done({raw:w,max:400,ratio,band,pct:ws?clamp(ratio/0.8*100,0,100):clamp(w/300*100,0,100),text:ta.value});};$('#fin').onclick=fin;startTimer(300,fin);}},
+{id:'fore',group:'Divergent thinking',apt:true,min:6,
+ run(el,done){const IM=[`<svg viewBox="0 0 120 120" width="150"><circle cx="52" cy="50" r="30" fill="none" stroke="#222" stroke-width="4"/><line x1="73" y1="71" x2="100" y2="102" stroke="#222" stroke-width="4" stroke-linecap="round"/></svg>`,
+  `<svg viewBox="0 0 120 120" width="150"><path d="M10 40 q15 -15 30 0 t30 0 t30 0" fill="none" stroke="#222" stroke-width="4"/><path d="M10 62 q15 -15 30 0 t30 0 t30 0" fill="none" stroke="#222" stroke-width="4"/><path d="M10 84 q15 -15 30 0 t30 0 t30 0" fill="none" stroke="#222" stroke-width="4"/></svg>`,
+  `<svg viewBox="0 0 120 120" width="150"><path d="M20 80 A40 40 0 0 1 100 80" fill="none" stroke="#222" stroke-width="4"/><line x1="10" y1="80" x2="110" y2="80" stroke="#222" stroke-width="4"/><circle cx="104" cy="58" r="5" fill="#222"/></svg>`];
+  let k=0,total=0;const all=[];
+  const show=()=>{el.innerHTML=`<div class="card"><div class="muted center">${t('drawing',k+1)}</div><div class="center">${IM[k]}</div><textarea id="ta" style="min-height:200px" placeholder="${t('foreHolder')}"></textarea><div class="center" style="margin-top:12px"><button class="primary" id="fin">${t('done')}</button></div></div>`;$('#ta').focus();
+   const nx=()=>{stopTimer();const lines=[...new Set($('#ta').value.split('\n').map(s=>s.trim().toLowerCase()).filter(s=>s.length>1))];total+=lines.length;all.push(lines);k++;if(k<3)show();else done({raw:total,max:60,band:bandHL(total,15,35),pct:clamp(total/50*100,0,100),lines:all});};$('#fin').onclick=nx;startTimer(120,nx);};show();}},
+{id:'ind',group:'Convergent thinking',apt:true,min:5,
+ run(el,done){const keys=['shape','color','shape','color','fill','shape','color','mark','fill','size','mark','color','size','fill','mark','size','shape','mark','size','fill'];const items=keys.map(indItem);
+  seq(20,300,(i,ans)=>{const it=items[i];const sel=new Set();el.innerHTML=`<div class="card center"><div class="muted">${t('indRow',i+1)}</div><div class="ind-row">${it.items.map((o,k)=>`<button class="ind" data-k="${k}">${indSvg(o)}</button>`).join('')}</div><button class="primary" id="sub" disabled>${t('submit')}</button></div>`;
+   const sb=$('#sub');$$('.ind',el).forEach(b=>b.onclick=()=>{const k=+b.dataset.k;if(sel.has(k))sel.delete(k);else if(sel.size<3)sel.add(k);b.classList.toggle('sel',sel.has(k));sb.disabled=sel.size!==3;});
+   const go=()=>{if(sel.size===3)ans(it.tgt.every(x=>sel.has(x)));};sb.onclick=go;KEYH=e=>{if(e.key==='Enter')go();};},
+   r=>done({raw:r.correct,max:20,band:bandHL(r.correct,8,15),pct:r.correct/20*100}));}},
+{id:'ana',group:'Convergent thinking',apt:true,min:6,
+ run(el,done){const T=shuffle(L().data.trees);
+  seq(12,360,(i,ans)=>{const tr=T[i];const chips=shuffle([tr[0],...tr[1],...tr[2]]);const S={};let sel=null;
+   const draw=()=>{const used=Object.values(S);const slot=(id,span)=>`<div class="slot ${S[id]?'filled':''}" data-s="${id}" style="grid-column:${span}">${S[id]||''}</div>`;
+    el.innerHTML=`<div class="card"><div class="muted center">${t('chart',i+1)}</div><div class="tree">${slot('r','2 / 4')}${slot('m0','1 / 3')}${slot('m1','3 / 5')}${slot('l00','1')}${slot('l01','2')}${slot('l10','3')}${slot('l11','4')}</div>
+     <div class="pool">${chips.filter(c=>!used.includes(c)).map(c=>`<span class="wchip ${sel===c?'sel':''}" data-c="${c}">${c}</span>`).join('')}</div><div class="center" style="margin-top:12px"><button class="primary" id="sub" ${used.length<7?'disabled':''}>${t('submit')}</button></div></div>`;
+    $$('.wchip',el).forEach(b=>b.onclick=()=>{sel=sel===b.dataset.c?null:b.dataset.c;draw();});
+    $$('.slot',el).forEach(b=>b.onclick=()=>{const s=b.dataset.s;if(sel){S[s]=sel;sel=null;}else delete S[s];draw();});
+    $('#sub').onclick=()=>{const g=(m,a,b)=>m&&new Set([a,b]).size===2&&[a,b].every(x=>tr.find(n=>Array.isArray(n)&&n[0]===m)?.slice(1).includes(x));
+     ans(S.r===tr[0]&&g(S.m0,S.l00,S.l01)&&g(S.m1,S.l10,S.l11)&&S.m0!==S.m1);};};draw();},
+   r=>done({raw:r.correct,max:12,band:bandHL(r.correct,6,10),pct:r.correct/12*100}));}},
+{id:'nr',group:'Numerical',apt:true,min:6,
+ run(el,done){const items=NSORDER.map(g=>NSG[g]());
+  seq(18,360,(i,ans)=>{const s=items[i];el.innerHTML=`<div class="card center"><div class="muted">${t('item',i+1,18)}</div><div class="big mono" style="margin:16px 0">${s.slice(0,-1).join(',  ')},  ?</div><div class="row" style="justify-content:center"><input id="in" type="number" style="max-width:160px"><button class="primary" id="ok">${t('enter')}</button><button id="sk">${t('skip')}</button></div></div>`;
+   const inp=$('#in');inp.focus();const go=()=>{if(inp.value.trim()==='')return;ans(+inp.value===s[s.length-1]);};$('#ok').onclick=go;$('#sk').onclick=()=>ans(null);inp.onkeydown=e=>{if(e.key==='Enter')go();};},
+   r=>done({raw:r.correct,max:18,band:bandHL(r.correct,7,13),pct:r.correct/18*100}));}},
+{id:'nf',group:'Numerical',apt:true,min:4,
+ run(el,done){const items=Array.from({length:40},(_,i)=>nfItem(i<6?0:i<14?1:2));
+  seq(40,240,(i,ans)=>{const it=items[i];const S=[null,null,null,null];
+   const draw=()=>{const used=S.filter(v=>v!==null);const sl=k=>`<div class="slot ${S[k]!==null?'filled':''}" data-k="${k}">${S[k]!==null?it.pool[S[k]]:''}</div>`;
+    el.innerHTML=`<div class="card center"><div class="muted">${t('itemN',i+1)}</div><div class="eq">${sl(0)}<b>${it.o1}</b>${sl(1)}<b>=</b><b>${it.R1}</b></div><div class="eq">${sl(2)}<b>${it.o2}</b>${sl(3)}<b>=</b><b>${it.R2}</b></div>
+     <div class="pool">${it.pool.map((v,k)=>used.includes(k)?'':`<span class="wchip" data-k="${k}" style="font-size:20px">${v}</span>`).join('')}</div></div>`;
+    $$('.wchip',el).forEach(b=>b.onclick=()=>{const e=S.indexOf(null);if(e>=0){S[e]=+b.dataset.k;draw();if(!S.includes(null)){const v=S.map(k=>it.pool[k]);later(()=>ans(opv(it.o1,v[0],v[1])===it.R1&&opv(it.o2,v[2],v[3])===it.R2),180);}}});
+    $$('.slot',el).forEach(b=>b.onclick=()=>{S[+b.dataset.k]=null;draw();});};draw();},
+   r=>done({raw:r.correct,wrong:r.wrong,max:25,band:bandHL(r.correct,8,16),pct:clamp(r.correct/22*100,0,100)}));}},
+{id:'nm',group:'Numerical',apt:true,min:4,
+ run(el,done){const labs=shuffle(L().data.nmLabels).slice(0,8);const nums=labs.map(()=>String(100000+rnd(900000)));let finished=false;
+  const fin=()=>{if(finished)return;finished=true;stopTimer();let sc=0;$$('input[data-k]',el).forEach(inp=>{const tg=nums[+inp.dataset.k],v=inp.value.replace(/\D/g,'');for(let j=0;j<6;j++)if(v[j]===tg[j])sc++;});
+   done({raw:sc,max:48,band:bandHL(sc,20,36),pct:sc/48*100});};
+  const recall=()=>{const ord=shuffle([...labs.keys()]);el.innerHTML=`<div class="card"><h3>${t('typeEach')}</h3>${ord.map(k=>`<div class="row" style="margin:6px 0"><span style="width:110px">${labs[k]}</span><input data-k="${k}" type="text" inputmode="numeric" maxlength="6" class="mono" style="max-width:160px"></div>`).join('')}<button class="primary" id="sub">${t('done')}</button></div>`;
+   $('input',el).focus();startTimer(150,fin);$('#sub').onclick=fin;};
+  el.innerHTML=`<div class="card"><h3>${t('memorize')}</h3>${labs.map((l,k)=>`<div class="row" style="margin:6px 0;font-size:20px"><span style="width:140px">${l}</span><b class="mono" style="letter-spacing:3px">${nums[k]}</b></div>`).join('')}<button class="primary" id="rd">${t('ready')}</button></div>`;
+  const go=()=>distractor(el,30,recall);startTimer(90,go);$('#rd').onclick=()=>{stopTimer();go();};}},
+{id:'gr',group:'Perceptual speed',apt:true,min:2,
+ run(el,done){const pair=()=>{const n=5+rnd(5);let a=String(1+rnd(9));while(a.length<n)a+=rnd(10);if(Math.random()<.5)return{a,b:a,same:true};const b=a.split('');
+   if(Math.random()<.5){const i=rnd(n);let d;do{d=String(rnd(10))}while(d===b[i]);b[i]=d;}else{let i=rnd(n-1),k=0;while(b[i]===b[i+1]&&k++<20)i=rnd(n-1);if(b[i]===b[i+1])b[i]=String((+b[i]+1)%10);else[b[i],b[i+1]]=[b[i+1],b[i]];}
+   return{a,b:b.join(''),same:false};};
+  seq(400,90,(i,ans)=>{const p=pair();el.innerHTML=`<div class="card center"><div class="mono big" style="margin:18px 0">${p.a}<span style="color:#bbb;margin:0 22px">|</span>${p.b}</div><div class="row" style="justify-content:center"><button id="s">${t('sameF')}</button><button id="d">${t('diffJ')}</button></div></div>`;
+   const a=v=>ans(v===p.same);$('#s').onclick=()=>a(true);$('#d').onclick=()=>a(false);KEYH=e=>{if(e.code==='KeyF')a(true);if(e.code==='KeyJ')a(false);};},
+   r=>{const v=Math.max(0,r.correct-r.wrong);done({raw:v,correct:r.correct,wrong:r.wrong,max:60,band:bandHL(v,25,45),pct:clamp(v/60*100,0,100)});});}},
+{id:'tonal',group:'Auditory',apt:true,min:5,
+ run(el,done){const SC=[60,62,64,65,67,69,71,72,74,76];const lens=[3,3,4,4,5,5,6,6,7,7,8,8];
+  seq(12,0,(i,ans)=>{const Ln=lens[i];const s=[];let idx=rnd(SC.length);for(let k=0;k<Ln;k++){let n;do{n=rnd(SC.length)}while(n===idx);idx=n;s.push(n);}
+   const ch=rnd(Ln),s2=[...s];let nv;do{nv=clamp(s[ch]+pick([-3,-2,-1,1,2,3]),0,SC.length-1)}while(nv===s[ch]||nv===s[ch-1]||nv===s[ch+1]);s2[ch]=nv;
+   el.innerHTML=`<div class="card center"><div class="muted">${t('item',i+1,12)} · ${t('notes',Ln)}</div><p id="st">${t('pressPlay')}</p><button class="primary" id="pl">${t('play')}</button><div class="opts" id="ops"></div></div>`;
+   $('#pl').onclick=()=>{$('#pl').disabled=true;$('#st').textContent=t('listen');const c=ac(),t0=c.currentTime+.2,d=.5;s.forEach((n,k)=>tone(midiF(SC[n]),t0+k*d,.45,'triangle'));const t1=t0+Ln*d+1.1;s2.forEach((n,k)=>tone(midiF(SC[n]),t1+k*d,.45,'triangle'));
+    later(()=>{$('#st').textContent=t('whichNote');$('#ops').innerHTML=s.map((_,k)=>`<button data-k="${k}">${k+1}</button>`).join('');$$('#ops button').forEach(b=>b.onclick=()=>ans(+b.dataset.k===ch));},(t1-c.currentTime+Ln*d)*1000);};},
+   r=>done({raw:r.correct,max:12,band:bandHL(r.correct,5,9),pct:r.correct/12*100}));}},
+{id:'pitch',group:'Auditory',apt:true,min:5,
+ run(el,done){const cents=[60,60,50,50,40,40,30,30,25,25,20,20,16,16,12,12,10,10,8,8,6,6,5,5,4,4,3,3,2,2];let hard=0;
+  seq(30,0,(i,ans)=>{const f0=300+rnd(300),up=Math.random()<.5,f1=f0*2**((up?1:-1)*cents[i]/1200);
+   el.innerHTML=`<div class="card center"><div class="muted">${t('item',i+1,30)}</div><p id="st">${t('listen')}</p><div class="row" style="justify-content:center"><button id="h" disabled>${t('higher')}</button><button id="l" disabled>${t('lower')}</button></div></div>`;
+   const c=ac(),tm=c.currentTime+.25;tone(f0,tm,.5);tone(f1,tm+1,.5);
+   later(()=>{$('#st').textContent=t('secondWas');$('#h').disabled=$('#l').disabled=false;const a=v=>{if(v===up&&cents[i]<=10)hard++;ans(v===up);};$('#h').onclick=()=>a(true);$('#l').onclick=()=>a(false);
+    KEYH=e=>{if(e.key==='ArrowUp')a(true);if(e.key==='ArrowDown')a(false);};},1800);},
+   r=>done({raw:r.correct,hard,max:30,band:bandHL(r.correct,19,26),pct:r.correct/30*100}));}},
+{id:'rhythm',group:'Auditory',apt:true,min:5,
+ run(el,done){seq(20,0,(i,ans)=>{const n=5+Math.floor(i/4);let io;do{io=Array.from({length:n-1},()=>pick([.2,.4]))}while(new Set(io).size<2);const same=Math.random()<.5;const io2=[...io];
+   if(!same){const cand=[];for(let k=0;k<io.length-1;k++)if(io[k]!==io[k+1])cand.push(k);if(cand.length&&Math.random()<.6){const k=pick(cand);[io2[k],io2[k+1]]=[io2[k+1],io2[k]];}else{const k=rnd(io.length);io2[k]=io2[k]===.2?.4:.2;}}
+   el.innerHTML=`<div class="card center"><div class="muted">${t('item',i+1,20)}</div><p id="st">${t('listen')}</p><div class="row" style="justify-content:center"><button id="s" disabled>${t('sameS2')}</button><button id="d" disabled>${t('diffD')}</button></div></div>`;
+   const c=ac();let tm=c.currentTime+.25;const play=a=>{click(tm);a.forEach(x=>{tm+=x;click(tm);});};play(io);tm+=1.3;play(io2);
+   later(()=>{$('#st').textContent=t('sameOrDiff');$('#s').disabled=$('#d').disabled=false;const a=v=>ans(v===same);$('#s').onclick=()=>a(true);$('#d').onclick=()=>a(false);
+    KEYH=e=>{if(e.code==='KeyS')a(true);if(e.code==='KeyD')a(false);};},(tm-c.currentTime+.3)*1000);},
+   r=>done({raw:r.correct,max:20,band:bandHL(r.correct,13,18),pct:r.correct/20*100}));}},
+{id:'md',group:'Visual',apt:true,min:4,
+ run(el,done){const ks=[3,4,4,5,5,6,6,7,8,9];let tot=0,perfect=0;const max=ks.reduce((a,b)=>a+b,0);
+  seq(10,0,(i,ans)=>{const D=mdDesign(ks[i]);el.innerHTML=`<div class="card center"><div class="muted">${t('mdMem',i+1)}</div>${mdSvg(D)}</div>`;
+   later(()=>{const U=new Set();let sel=null;const draw=()=>{el.innerHTML=`<div class="card center"><div class="muted">${t('mdRedraw',i+1)}</div><div id="g">${mdSvg(U,{sel})}</div><div class="row" style="justify-content:center"><button id="clr">${t('clear')}</button><button class="primary" id="dn">${t('done')}</button></div></div>`;
+     $$('#g circle').forEach(c=>c.onclick=()=>{const k=+c.dataset.i;if(sel===null)sel=k;else if(sel===k)sel=null;else{const a=[sel%4,Math.floor(sel/4)],b=[k%4,Math.floor(k/4)];
+      if(Math.abs(a[0]-b[0])<=1&&Math.abs(a[1]-b[1])<=1){const key=segKey(a,b);U.has(key)?U.delete(key):U.add(key);sel=null;}else sel=k;}draw();});
+     $('#clr').onclick=()=>{U.clear();sel=null;draw();};$('#dn').onclick=()=>{let c=0,x=0;U.forEach(k=>D.has(k)?c++:x++);tot+=Math.max(0,c-x);const ok=c===D.size&&x===0;if(ok)perfect++;ans(ok);};};draw();},ks[i]<=5?5000:7000);},
+   ()=>done({raw:tot,max,perfect,band:bandHL(tot/max,.45,.78),pct:tot/max*100}));}},
+{id:'obs',group:'Visual',apt:true,min:4,
+ run(el,done){seq(12,0,(i,ans)=>{const cells=shuffle([...Array(12).keys()]);const occ=cells.slice(0,9),free=cells.slice(9);const A=Array(12).fill('');const pool=shuffle(OBJ);occ.forEach((c,k)=>A[c]=pool[k]);
+   const B=[...A];const type=pick(['swap','move','remove','add']);let hit=[];
+   if(type==='swap'){const c=pick(occ);B[c]=pool[10];hit=[c];}else if(type==='move'){const c=pick(occ),f=pick(free);B[f]=A[c];B[c]='';hit=[c,f];}else if(type==='remove'){const c=pick(occ);B[c]='';hit=[c];}else{const f=pick(free);B[f]=pool[11];hit=[f];}
+   const scene=(S,cl)=>`<div class="scene ${cl?'click':''}">${S.map((o,k)=>`<div class="cell" data-k="${k}">${o}</div>`).join('')}</div>`;
+   el.innerHTML=`<div class="card center"><div class="muted">${t('obsStudy',i+1)}</div>${scene(A)}</div>`;
+   later(()=>{el.innerHTML=`<div class="card center"><div class="muted">…</div><div class="scene"></div></div>`;
+    later(()=>{el.innerHTML=`<div class="card center"><div class="muted">${t('obsTap',i+1)}</div>${scene(B,true)}</div>`;$$('.cell',el).forEach(c=>c.onclick=()=>ans(hit.includes(+c.dataset.k)));},1000);},6000);},
+   r=>done({raw:r.correct,max:12,band:bandHL(r.correct,5,9),pct:r.correct/12*100}));}},
+{id:'color',group:'Visual',apt:true,min:5,
+ run(el,done){const starts=[10,100,190,280],step=3.5;const rows=starts.map(()=>shuffle([1,2,3,4,5,6,7,8,9,10]));let sel=null;
+  const draw=()=>{el.innerHTML=`<div class="card">${rows.map((r,ri)=>`<div class="caps"><div class="cap anchor" style="background:${hueCol(starts[ri])}"></div>${r.map((v,k)=>`<div class="cap ${sel&&sel[0]===ri&&sel[1]===k?'sel':''}" data-r="${ri}" data-k="${k}" style="background:${hueCol(starts[ri]+v*step)}"></div>`).join('')}<div class="cap anchor" style="background:${hueCol(starts[ri]+11*step)}"></div></div>`).join('')}<div class="center"><button class="primary" id="dn">${t('done')}</button></div></div>`;
+   $$('.cap[data-r]',el).forEach(c=>c.onclick=()=>{const ri=+c.dataset.r,k=+c.dataset.k;if(!sel||sel[0]!==ri){sel=[ri,k];}else if(sel[1]===k)sel=null;else{const r=rows[ri];const[v]=r.splice(sel[1],1);r.splice(k,0,v);sel=null;}draw();});
+   $('#dn').onclick=()=>{let tes=0;rows.forEach(r=>{const a=[0,...r,11];for(let i=1;i<=10;i++)tes+=Math.abs(a[i]-a[i-1])+Math.abs(a[i]-a[i+1])-2;});
+    done({raw:tes,max:null,band:tes<=8?'High':tes<=40?'Average':'Low',pct:clamp(100-tes*1.2,0,100)});};};draw();}},
+{id:'vd',group:'Visual',apt:true,min:4,
+ run(el,done){const pairs=shuffle([...Array(10)].map(()=>['simple','complex']).concat([...Array(10)].map(()=>['sym','asym'])));let c1=0,c2=0;
+  seq(20,0,(i,ans)=>{const[p,q]=pairs[i],pal=pick(PALS),flip=Math.random()<.5,Lf=flip?q:p,Rt=flip?p:q;
+   el.innerHTML=`<div class="card center"><div class="muted">${t('vdPair',i+1)}</div><div class="pairpick"><button id="a">${vComp(Lf,pal)}</button><button id="b">${vComp(Rt,pal)}</button></div></div>`;
+   const a=ch=>{if(ch==='complex')c1++;if(ch==='asym')c2++;ans(null);};$('#a').onclick=()=>a(Lf);$('#b').onclick=()=>a(Rt);},
+   ()=>done({raw:c1+c2,max:20,band:null,pct:null,vd1:c1,vd2:c2}));}},
+{id:'sil',group:'Language',apt:true,min:6,
+ run(el,done){const E=shuffle(L().data.silWords).slice(0,18),N=[];while(N.length<18){const w=nonsense();if(!N.includes(w))N.push(w);}
+  let finished=false;const fin=()=>{if(finished)return;finished=true;stopTimer();let sc=0;$$('input[data-k]',el).forEach(inp=>{const d=lev(inp.value.trim().toUpperCase(),N[+inp.dataset.k]);sc+=d===0?1:d===1?.5:0;});
+   done({raw:sc,max:18,band:bandHL(sc,6,12),pct:sc/18*100});};
+  const recall=()=>{const ord=shuffle([...E.keys()]);el.innerHTML=`<div class="card"><h3>${t('silType')}</h3><div style="columns:2;column-gap:24px">${ord.map(k=>`<div class="row" style="margin:5px 0;break-inside:avoid"><span style="width:90px">${E[k]}</span><input data-k="${k}" type="text" class="mono" style="max-width:150px" autocomplete="off"></div>`).join('')}</div><button class="primary" id="sub">${t('done')}</button></div>`;
+   $('input',el).focus();startTimer(240,fin);$('#sub').onclick=fin;};
+  el.innerHTML=`<div class="card"><h3>${t('silStudy')}</h3><div style="columns:2;column-gap:24px">${E.map((w,k)=>`<div style="margin:5px 0;font-size:17px">${w} — <b class="mono">${N[k]}</b></div>`).join('')}</div><button class="primary" id="rd">${t('ready')}</button></div>`;
+  const go=()=>distractor(el,30,recall);startTimer(150,go);$('#rd').onclick=()=>{stopTimer();go();};}},
+{id:'finger',group:'Motor',apt:true,min:1,
+ run(el,done){el.innerHTML=`<div class="card center"><svg id="bd" viewBox="0 0 600 320" style="width:100%;max-width:640px;touch-action:none;background:#efe9dd;border-radius:10px"></svg></div>`;const bd=$('#bd');let hits=0,miss=0,cur=-1,live=true;
+  const H=[];for(let r=0;r<5;r++)for(let c=0;c<8;c++)H.push([50+c*71,40+r*60]);
+  const draw=()=>{bd.innerHTML=H.map(([x,y],k)=>`<circle cx="${x}" cy="${y}" r="9" fill="${k===cur?'#b8502f':'#c9bfac'}"/>`).join('');};
+  const nxt=()=>{let k;do{k=rnd(H.length)}while(k===cur);cur=k;draw();};nxt();
+  bd.onpointerdown=e=>{if(!live)return;const p=new DOMPoint(e.clientX,e.clientY).matrixTransform(bd.getScreenCTM().inverse());const[x,y]=H[cur];if(Math.hypot(p.x-x,p.y-y)<=14){hits++;nxt();}else miss++;};
+  startTimer(30,()=>{live=false;done({raw:hits,miss,max:70,band:bandHL(hits,35,55),pct:clamp(hits/70*100,0,100)});});}},
+{id:'tweezer',group:'Motor',apt:true,min:1.5,
+ run(el,done){el.innerHTML=`<div class="card center"><svg id="bd" viewBox="0 0 600 320" style="width:100%;max-width:640px;touch-action:none;background:#efe9dd;border-radius:10px"></svg></div>`;const bd=$('#bd');
+  const H=[];for(let r=0;r<6;r++)for(let c=0;c<7;c++)H.push([180+c*58,35+r*50]);let tgt=rnd(H.length),pin=[60,160],drag=false,placed=0,drops=0,live=true;
+  const draw=()=>{bd.innerHTML=`<rect x="20" y="110" width="80" height="100" rx="8" fill="#ddd3c2"/>`+H.map(([x,y],k)=>`<circle cx="${x}" cy="${y}" r="6" fill="${k===tgt?'#b8502f':'#c9bfac'}"/>`).join('')+`<circle cx="${pin[0]}" cy="${pin[1]}" r="5" fill="#2f5d8a" stroke="#fff" stroke-width="1.5"/><circle cx="${pin[0]}" cy="${pin[1]}" r="14" fill="transparent" style="cursor:grab"/>`;};
+  const pt=e=>{const p=new DOMPoint(e.clientX,e.clientY).matrixTransform(bd.getScreenCTM().inverse());return[p.x,p.y];};draw();
+  bd.onpointerdown=e=>{if(!live)return;const p=pt(e);if(Math.hypot(p[0]-pin[0],p[1]-pin[1])<=14){drag=true;bd.setPointerCapture(e.pointerId);}};
+  bd.onpointermove=e=>{if(drag){pin=pt(e);draw();}};
+  bd.onpointerup=()=>{if(!drag)return;drag=false;drops++;const[x,y]=H[tgt];if(Math.hypot(pin[0]-x,pin[1]-y)<=7){placed++;let k;do{k=rnd(H.length)}while(k===tgt);tgt=k;}pin=[60,160];draw();};
+  startTimer(60,()=>{live=false;done({raw:placed,drops,max:30,band:bandHL(placed,10,18),pct:clamp(placed/30*100,0,100)});});}},
+{id:'grip',group:'Motor',apt:true,min:1,
+ run(el,done){el.innerHTML=`<div class="card"><div class="row"><label>${t('gripL')} <input id="gl" type="number" style="max-width:120px"></label><label>${t('gripR')} <input id="gr" type="number" style="max-width:120px"></label></div><div class="row" style="margin-top:12px"><button class="primary" id="ok">${t('save')}</button><button id="sk">${t('skip')}</button></div></div>`;
+  $('#ok').onclick=()=>{const l=+$('#gl').value||0,r=+$('#gr').value||0;done({raw:l+r,l,r,max:null,band:null,pct:null});};$('#sk').onclick=()=>done({raw:null,max:null,band:null,pct:null,skipped:true});}},
+{id:'wa',group:'Personality',apt:false,min:4,
+ run(el,done){const W=shuffle(L().data.wa);let common=0;const resp=[];
+  seq(30,0,(i,ans)=>{el.innerHTML=`<div class="card center"><div class="muted">${t('ofN',i+1,30)}</div><div class="big" style="margin:16px">${W[i][0]}</div><input id="in" type="text" autocomplete="off" style="max-width:260px"><div class="row" style="justify-content:center;margin-top:12px"><button class="primary" id="ok">${t('enter')}</button><button id="sk">${t('skip')}</button></div></div>`;const inp=$('#in');inp.focus();
+   const go=()=>{if(!inp.value.trim())return;const first=inp.value.trim().split(/\s+/)[0];resp.push([W[i][0],inp.value.trim()]);const ok=waMatch(first,W[i][1]);if(ok)common++;ans(ok);};
+   $('#ok').onclick=go;$('#sk').onclick=()=>ans(null);inp.onkeydown=e=>{if(e.key==='Enter')go();};},
+   ()=>{const style=common>=21?'Objective':common<=14?'Subjective':'Mid';done({raw:common,max:30,band:null,pct:common/30*100,style,responses:resp});});}},
+{id:'vocab',group:'Knowledge',apt:false,min:8,
+ run(el,done){const V=L().data.voc;seq(30,720,(i,ans)=>{const[w,...o]=V[i];const ch=shuffle(o);el.innerHTML=`<div class="card center"><div class="muted">${t('ofN',i+1,30)}</div><div class="big" style="margin:14px"><b>${w}</b></div><div class="opts">${ch.map(c=>`<button data-c="${c}">${c}</button>`).join('')}</div></div>`;
+   $$('.opts button',el).forEach(b=>b.onclick=()=>ans(b.dataset.c===o[0]));},
+   r=>done({raw:r.correct,max:30,band:bandHL(r.correct,14,23),pct:r.correct/30*100}));}}
+];
+const GROUPS=['Spatial','Divergent thinking','Convergent thinking','Numerical','Perceptual speed','Auditory','Visual','Language','Motor','Personality','Knowledge','Control'];
+const ORDER={1:['ws','idea','fore','ind','ana','nr','nf','nm','gr','sil','wa','vocab'],2:['block','pf','tonal','pitch','rhythm','md','obs','color','vd','finger','tweezer','grip']};
+const byId=id=>TESTS.find(x=>x.id===id);
+
+/* ================= screens ================= */
+function home(){cleanup();applyLang();const nApt=TESTS.filter(x=>x.apt&&RESULTS[x.id]).length;
+ const sess=k=>ORDER[k].map(byId).map(x=>{const r=RESULTS[x.id];return`<div class="tile ${r?'done':''}"><div><span class="nm">${TN(x.id)}${x.apt?'':` <span class="muted">${t('nonApt')}</span>`}</span><span class="muted">${r?labelOf(x.id,r)+bandChip(r.band):t('minutes',x.min)}</span></div><button class="${r?'':'primary'}" onclick="openTest('${x.id}')">${r?t('retake'):t('start')}</button></div>`;}).join('');
+ stage.innerHTML=`<div class="card hero"><h2>${t('h2')}</h2>${t('intro')}
+ <div class="row">${t('completed',nApt)}<button class="primary" onclick="report()">${t('viewReport')}</button></div></div>
+ <div class="card"><h3>${t('s1')}</h3><div class="test-list">${sess(1)}</div></div>
+ <div class="card"><h3>${t('s2')}</h3><div class="muted" style="margin-bottom:8px">${t('audioNote')}</div><div class="test-list">${sess(2)}</div></div>
+ <div class="card noprint row"><button onclick="exportJSON()">${t('export')}</button><button onclick="$('#imp').click()">${t('import')}</button><input id="imp" type="file" accept=".json" style="display:none" onchange="importJSON(this)"><button onclick="if(confirm(t('confirmReset'))){RESULTS={};store.set({});home();}">${t('reset')}</button></div>`;}
+function openTest(id){cleanup();const x=byId(id);const[nm,meas,instr]=L().tests[id];
+ stage.innerHTML=`<div class="card"><div class="muted">${t('groups')[x.group]}${x.apt?' · '+t('aptTag'):''}</div><h2>${nm}</h2><p><b>${t('measures')}</b> ${meas}</p><p>${instr}</p><div class="row"><button class="primary" id="go">${t('begin')}</button><button onclick="home()">${t('back')}</button></div></div>`;
+ $('#go').onclick=()=>{if(['tonal','pitch','rhythm'].includes(id))ac();$('#exitBtn').style.display='';$('#langSw').style.display='none';x.run(stage,res=>{cleanup();saveResult(id,res);const r=RESULTS[id];
+  stage.innerHTML=`<div class="card center"><h2>${t('doneTitle',nm)}</h2><p style="font-size:18px">${labelOf(id,r)}${bandChip(r.band)}</p><div class="row" style="justify-content:center"><button class="primary" onclick="home()">${t('backToBattery')}</button><button onclick="report()">${t('profileReport')}</button></div></div>`;});};}
+
+function report(){cleanup();applyLang();const R=RESULTS,P=L().rep;
+ const sv=(R.pf||R.block)?(()=>{const ps=[R.pf,R.block].filter(Boolean).map(r=>r.pct);const p=ps.reduce((a,b)=>a+b,0)/ps.length;return{pct:p,band:p<38?'Low':p>=68?'High':'Average',label:P.composite(ps.length)};})():null;
+ const rows=GROUPS.map(g=>{const ts=TESTS.filter(x=>x.group===g);let h=`<tr class="grp"><td colspan="4">${t('groups')[g]}</td></tr>`;
+  if(g==='Spatial')h+=`<tr><td><b>${P.sv}</b></td><td>${sv?sv.label:'—'}</td><td>${sv?bandChip(sv.band):''}</td><td>${sv?`<div class="bar"><i style="width:${sv.pct}%"></i></div>`:''}</td></tr>`;
+  ts.forEach(x=>{const r=R[x.id];h+=`<tr><td>${TN(x.id)}</td><td>${r?labelOf(x.id,r):`<span class="muted">${P.notTaken}</span>`}</td><td>${r?bandChip(r.band):''}</td><td>${r&&r.pct!=null?`<div class="bar"><i style="width:${r.pct}%"></i></div>`:''}</td></tr>`;});return h;}).join('');
+ const style=R.wa?R.wa.style:null;let core='';
+ if(sv&&style){const hi=sv.band==='High',lo=sv.band==='Low',obj=style==='Objective',subj=style==='Subjective';
+  core=hi&&subj?P.core.ts:hi&&obj?P.core.tg:lo&&subj?P.core.ns:lo&&obj?P.core.g:P.core.mix;}
+ const strong=Object.entries(P.hints).map(([k,hint])=>{const r=k==='sv'?sv:R[k];return r&&r.band==='High'?`<li><b>${k==='sv'?P.sv:TN(k)}</b> — ${hint}</li>`:'';}).join('');
+ stage.innerHTML=`<div class="card"><div class="row" style="justify-content:space-between"><h2>${P.title}</h2><div class="row noprint"><button onclick="window.print()">${P.print}</button><button onclick="home()">${t('back')}</button></div></div>
+  <p class="muted">${P.note} ${new Date().toLocaleDateString(LNG==='uk'?'uk-UA':'en-US')}</p>
+  <table class="report" style="width:100%;border-collapse:collapse"><tr><th>${P.th[0]}</th><th>${P.th[1]}</th><th>${P.th[2]}</th><th></th></tr>${rows}</table></div>
+  <div class="card"><h3>${P.coreH}</h3><p>${core||P.core.need}</p>${R.idea&&R.idea.band==='High'?P.ideaHigh:''}
+  <h3>${P.strongH}</h3>${strong?`<ul>${strong}</ul>`:`<p class="muted">${P.noHigh}</p>`}${R.vd?P.vd(R.vd.vd1,R.vd.vd2):''}
+  <h3>${P.howH}</h3>${P.how}</div>`;}
+function exportJSON(){const b=new Blob([JSON.stringify(RESULTS,null,1)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='aptitude-results.json';a.click();}
+function importJSON(inp){const f=inp.files[0];if(!f)return;f.text().then(s=>{try{RESULTS=JSON.parse(s);store.set(RESULTS);home();}catch(e){alert(t('importErr'));}});}
+home();
+</script>
+</body>
+</html>
