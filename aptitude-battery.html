@@ -500,21 +500,21 @@ const TESTS=[
    $$('.opt',el).forEach(b=>b.onclick=()=>ans(+b.dataset.k===it.ans));KEYH=e=>{const k=['KeyA','KeyB','KeyC','KeyD'].indexOf(e.code);if(k>=0)ans(k===it.ans);};},
    r=>done({raw:r.correct,max:12,band:bandHL(r.correct,5,9),pct:r.correct/12*100}));}},
 {id:'ws',group:'Control',apt:false,min:1,
- run(el,done){el.innerHTML=`<div class="card"><p class="center" style="font-size:20px">${L().data.ws}</p><textarea id="ta" style="min-height:160px"></textarea></div>`;const ta=$('#ta');ta.focus();
-  startTimer(60,()=>{const w=words(ta.value);done({raw:w,max:null,band:null,pct:null});});}},
+ run(el,done){el.innerHTML=`<div class="card"><p class="center" style="font-size:20px">${L().data.ws}</p><textarea id="ta" style="min-height:160px"></textarea><div class="center" style="margin-top:12px"><button class="primary" id="fin">${t('done')}</button></div></div>`;const ta=$('#ta');ta.focus();
+  const fin=()=>{stopTimer();const w=words(ta.value);done({raw:w,max:null,band:null,pct:null});};$('#fin').onclick=fin;startTimer(60,fin);}},
 {id:'idea',group:'Divergent thinking',apt:true,min:5,
  run(el,done){const T=pick(L().data.topics);
-  el.innerHTML=`<div class="card"><h3>${t('topic')}</h3><p style="font-size:18px">${T}</p><textarea id="ta" placeholder="${t('ideaHolder')}"></textarea></div>`;const ta=$('#ta');ta.focus();
-  startTimer(300,()=>{const w=words(ta.value),wpm=w/5,ws=RESULTS.ws&&RESULTS.ws.raw;let band,ratio=null;
+  el.innerHTML=`<div class="card"><h3>${t('topic')}</h3><p style="font-size:18px">${T}</p><textarea id="ta" placeholder="${t('ideaHolder')}"></textarea><div class="center" style="margin-top:12px"><button class="primary" id="fin">${t('done')}</button></div></div>`;const ta=$('#ta');ta.focus();
+  const fin=()=>{stopTimer();const w=words(ta.value),wpm=w/5,ws=RESULTS.ws&&RESULTS.ws.raw;let band,ratio=null;
    if(ws){ratio=wpm/ws;band=ratio<.35?'Low':ratio>=.6?'High':'Average';}else band=bandHL(w,120,220);
-   done({raw:w,max:400,ratio,band,pct:ws?clamp(ratio/0.8*100,0,100):clamp(w/300*100,0,100),text:ta.value});});}},
+   done({raw:w,max:400,ratio,band,pct:ws?clamp(ratio/0.8*100,0,100):clamp(w/300*100,0,100),text:ta.value});};$('#fin').onclick=fin;startTimer(300,fin);}},
 {id:'fore',group:'Divergent thinking',apt:true,min:6,
  run(el,done){const IM=[`<svg viewBox="0 0 120 120" width="150"><circle cx="52" cy="50" r="30" fill="none" stroke="#222" stroke-width="4"/><line x1="73" y1="71" x2="100" y2="102" stroke="#222" stroke-width="4" stroke-linecap="round"/></svg>`,
   `<svg viewBox="0 0 120 120" width="150"><path d="M10 40 q15 -15 30 0 t30 0 t30 0" fill="none" stroke="#222" stroke-width="4"/><path d="M10 62 q15 -15 30 0 t30 0 t30 0" fill="none" stroke="#222" stroke-width="4"/><path d="M10 84 q15 -15 30 0 t30 0 t30 0" fill="none" stroke="#222" stroke-width="4"/></svg>`,
   `<svg viewBox="0 0 120 120" width="150"><path d="M20 80 A40 40 0 0 1 100 80" fill="none" stroke="#222" stroke-width="4"/><line x1="10" y1="80" x2="110" y2="80" stroke="#222" stroke-width="4"/><circle cx="104" cy="58" r="5" fill="#222"/></svg>`];
   let k=0,total=0;const all=[];
-  const show=()=>{el.innerHTML=`<div class="card"><div class="muted center">${t('drawing',k+1)}</div><div class="center">${IM[k]}</div><textarea id="ta" style="min-height:200px" placeholder="${t('foreHolder')}"></textarea></div>`;$('#ta').focus();
-   startTimer(120,()=>{const lines=[...new Set($('#ta').value.split('\n').map(s=>s.trim().toLowerCase()).filter(s=>s.length>1))];total+=lines.length;all.push(lines);k++;if(k<3)show();else done({raw:total,max:60,band:bandHL(total,15,35),pct:clamp(total/50*100,0,100),lines:all});});};show();}},
+  const show=()=>{el.innerHTML=`<div class="card"><div class="muted center">${t('drawing',k+1)}</div><div class="center">${IM[k]}</div><textarea id="ta" style="min-height:200px" placeholder="${t('foreHolder')}"></textarea><div class="center" style="margin-top:12px"><button class="primary" id="fin">${t('done')}</button></div></div>`;$('#ta').focus();
+   const nx=()=>{stopTimer();const lines=[...new Set($('#ta').value.split('\n').map(s=>s.trim().toLowerCase()).filter(s=>s.length>1))];total+=lines.length;all.push(lines);k++;if(k<3)show();else done({raw:total,max:60,band:bandHL(total,15,35),pct:clamp(total/50*100,0,100),lines:all});};$('#fin').onclick=nx;startTimer(120,nx);};show();}},
 {id:'ind',group:'Convergent thinking',apt:true,min:5,
  run(el,done){const keys=['shape','color','shape','color','fill','shape','color','mark','fill','size','mark','color','size','fill','mark','size','shape','mark','size','fill'];const items=keys.map(indItem);
   seq(20,300,(i,ans)=>{const it=items[i];const sel=new Set();el.innerHTML=`<div class="card center"><div class="muted">${t('indRow',i+1)}</div><div class="ind-row">${it.items.map((o,k)=>`<button class="ind" data-k="${k}">${indSvg(o)}</button>`).join('')}</div><button class="primary" id="sub" disabled>${t('submit')}</button></div>`;
@@ -643,8 +643,9 @@ const TESTS=[
   $('#ok').onclick=()=>{const l=+$('#gl').value||0,r=+$('#gr').value||0;done({raw:l+r,l,r,max:null,band:null,pct:null});};$('#sk').onclick=()=>done({raw:null,max:null,band:null,pct:null,skipped:true});}},
 {id:'wa',group:'Personality',apt:false,min:4,
  run(el,done){const W=shuffle(L().data.wa);let common=0;const resp=[];
-  seq(30,0,(i,ans)=>{el.innerHTML=`<div class="card center"><div class="muted">${t('ofN',i+1,30)}</div><div class="big" style="margin:16px">${W[i][0]}</div><input id="in" type="text" autocomplete="off" style="max-width:260px"></div>`;const inp=$('#in');inp.focus();
-   inp.onkeydown=e=>{if(e.key==='Enter'&&inp.value.trim()){const first=inp.value.trim().split(/\s+/)[0];resp.push([W[i][0],inp.value.trim()]);const ok=waMatch(first,W[i][1]);if(ok)common++;ans(ok);}};},
+  seq(30,0,(i,ans)=>{el.innerHTML=`<div class="card center"><div class="muted">${t('ofN',i+1,30)}</div><div class="big" style="margin:16px">${W[i][0]}</div><input id="in" type="text" autocomplete="off" style="max-width:260px"><div class="row" style="justify-content:center;margin-top:12px"><button class="primary" id="ok">${t('enter')}</button><button id="sk">${t('skip')}</button></div></div>`;const inp=$('#in');inp.focus();
+   const go=()=>{if(!inp.value.trim())return;const first=inp.value.trim().split(/\s+/)[0];resp.push([W[i][0],inp.value.trim()]);const ok=waMatch(first,W[i][1]);if(ok)common++;ans(ok);};
+   $('#ok').onclick=go;$('#sk').onclick=()=>ans(null);inp.onkeydown=e=>{if(e.key==='Enter')go();};},
    ()=>{const style=common>=21?'Objective':common<=14?'Subjective':'Mid';done({raw:common,max:30,band:null,pct:common/30*100,style,responses:resp});});}},
 {id:'vocab',group:'Knowledge',apt:false,min:8,
  run(el,done){const V=L().data.voc;seq(30,720,(i,ans)=>{const[w,...o]=V[i];const ch=shuffle(o);el.innerHTML=`<div class="card center"><div class="muted">${t('ofN',i+1,30)}</div><div class="big" style="margin:14px"><b>${w}</b></div><div class="opts">${ch.map(c=>`<button data-c="${c}">${c}</button>`).join('')}</div></div>`;
